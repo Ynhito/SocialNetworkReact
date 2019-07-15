@@ -1,0 +1,33 @@
+* {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style-type: none;
+}
+
+body {
+  background-color: #edeef0;
+}
+
+.app-wrapper {
+  max-width: 1170px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 10fr;
+  grid-template-rows: 60px 1fr;
+  grid-gap: 10px;
+  grid-template-areas: 
+  "header header"
+  "nav content";
+}
+
+.app-wrapper-content {
+  grid-area: content;
+  background-color: #fff;
+}

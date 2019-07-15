@@ -1,25 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import Header from './components/Header/Header';
+import Nav from './components/Nav/Nav';
+import Profile from './components/Profile/Profile';
+import Dialogs from './components/Dialogs/Dialogs';
+import {Route} from 'react-router-dom';
+import { addPost } from './redux/state';
 
-function App() {
+const App = (props) => {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div className='app-wrapper'>
+        <Header />
+        <Nav state={props.state.friends} />
+        <div className='app-wrapper-content'>
+          <Route path='/profile' render={ () => <Profile 
+            state={props.state.profile}
+            addPost={addPost} />} />
+          <Route path='/dialogs' render={ () => <Dialogs 
+            state={props.state.messages} />} />
+        </div>
+      </div>
   );
 }
 

@@ -1,0 +1,80 @@
+.dialogs {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  //border: 1px solid #6991ad;
+}
+
+.dialogs_items {
+  border-right: 2px solid #edeef0;
+
+  .dialogItem {
+
+    img {
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    a.active {
+      background-color: #6991ad;
+      color: #fff;
+      transition: all .2s ease;
+    }
+
+    &:not(:last-child) {
+      border-bottom:2px solid #edeef0;
+    }
+
+    .dialog {
+      padding: 8px;
+      display: flex;
+      align-items: center;
+ 
+      .dialogDiscription {
+       width: 100%;
+ 
+       
+      } 
+   }
+  }
+
+}
+
+.messages {
+  display: grid;
+  grid-template-rows: auto;
+  .message {
+    padding: 34px;
+  }
+
+  .inputArea {
+    display: grid;
+    grid-template-columns: 1fr 80px;
+    height: 80px;
+    align-self: flex-end;
+    textarea {
+      height: 50px;
+      border: 1px solid #6991ad;
+      border-radius: 10px;
+      width: 95%;
+      justify-self: center;
+      align-self: center;
+      outline: none;
+    }
+    button {
+      width: 80%;
+      height: 50px;
+      cursor: pointer;
+      background: inherit;
+      border: 1px solid #6991ad;
+      border-radius: 10px;
+      justify-self: center;
+      align-self: center;
+      transition: all .3s ease;
+
+      &:hover {
+        background-color: #6991ad;
+        color: #fff;
+      }
+    }
+  }
+}

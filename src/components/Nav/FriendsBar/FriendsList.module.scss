@@ -1,0 +1,28 @@
+.friends {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  
+    h2 {
+      text-align: center;
+      color: #4a76a8;
+    }
+  
+    .frindsList {
+      display: flex;
+      text-align: center;
+      justify-content: center;
+  
+      img {
+        border-radius: 50%;
+      }
+  
+      .frindsList_item {
+        cursor: pointer;
+        color: #4a76a8;
+        &:not(:last-child) {
+          margin-right: 5px;
+        }
+      }
+    }
+  }

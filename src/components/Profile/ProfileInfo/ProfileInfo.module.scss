@@ -1,0 +1,16 @@
+.ProfileInfo {
+  
+  .imageBackground {
+    width: 100%;
+    height: 250px;
+  }
+
+  .discription_block {
+    padding: 10px;
+    display: flex;
+
+    .imageAvatar {
+      border-radius: 50%;
+    }
+  }
+}
