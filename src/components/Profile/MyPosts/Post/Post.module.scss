@@ -1,4 +1,10 @@
 .item {
+    background-color: #fff;
+    padding: 16px;
+    border-radius: 4px;
+    &:not(:last-child) {
+        margin-bottom: 15px;
+    }
     .imageAvarat {
         border-radius: 50%;
     }

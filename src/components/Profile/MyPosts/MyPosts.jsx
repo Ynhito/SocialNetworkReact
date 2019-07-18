@@ -22,11 +22,14 @@ const MyPosts = (props) => {
 
   return (
     <div className={s.MyPosts}>
-      <h3 className={s.PostTitle}>
-        My Posts
-      </h3>
-      <textarea onChange={onPostChange} ref={newPostElement} value={props.newPostText} />
-      <button onClick={addPost}>Отправить</button>
+      <div className={s.newPostInput}>
+        <textarea 
+        onChange={onPostChange} 
+        ref={newPostElement} 
+        value={props.newPostText} 
+        placeholder="Что у вас нового?"/>
+        <button onClick={addPost}>Send</button>
+      </div>
       <div className={s.posts}>
         {postElement}
       </div>
