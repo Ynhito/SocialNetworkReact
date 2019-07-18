@@ -8,7 +8,7 @@ let state = {
       { id: 1, message: 'Hi, how are you' },
       { id: 2, message: 'Its my first post' }
     ],
-    newPostText: 'JOPA'
+    newPostText: ''
   },
   messages: {
     dialogsData: [
@@ -33,13 +33,15 @@ let state = {
   }
 }
 
+window.state = state;
 
-export const addPost = (postMessage) => {
+export const addPost = () => {
   let newPost = {
     id: 3,
-    message: postMessage,
+    message: state.profile.newPostText,
   };
   state.profile.postsData.push(newPost);
+  state.profile.newPostText ='';
   reRenderEntireTree(state);
 }
 
