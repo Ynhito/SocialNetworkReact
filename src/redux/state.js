@@ -29,13 +29,18 @@ let store = {
       ]
     }
   },
-  getState() {
-    return this._state;
-  },
   _callSubscriber() {
     console.log("state changed")
   },
-  addPost() {
+
+  getState() {
+    return this._state;
+  },
+  subscribe(observer) {
+    this._callSubscriber = observer;
+  },
+
+  _addPost() {
     let newPost = {
       id: 3,
       message: this._state.profile.newPostText,
@@ -44,12 +49,24 @@ let store = {
     this._state.profile.newPostText ='';
     this._callSubscriber(this._state);
   },
-  updateNewPostText(newText) {
+  _updateNewPostText(newText) {
     this._state.profile.newPostText = newText;
     this._callSubscriber(this._state);
   },
-  subscribe(observer) {
-    this._callSubscriber = observer;
+  dispatch(action) {
+    // if (action.type === 'ADD-POST') {
+    //   this._addPost();
+    // } else if (action.type === 'UPDATE-NEW-POST-TEXT') {
+    //   this._updateNewPostText(action.newText);
+    // }
+    switch(action.type) {
+      case 'ADD-POST':
+        this._addPost();
+        break;
+      case 'UPDATE-NEW-POST-TEXT':
+        this._updateNewPostText(action.newText);
+        break;
+    }
   }
 }
 
