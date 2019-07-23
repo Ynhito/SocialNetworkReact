@@ -1,6 +1,5 @@
 import React from 'react';
 import s from './FriendsList.module.scss';
-import { NavLink } from 'react-router-dom';
 import Friend from './FriendItem/Friend';
 
 const FriendsList = (props) => {
