@@ -2,14 +2,10 @@ const UPDATE_NEW_MESSAGE_TEXT = 'UPDATE-NEW-MESSAGE-TEXT';
 const SEND_MESSAGE = 'SEND_MESSAGE';
 
 const messagesReducer = (state, action) => {
-  debugger;
   switch(action.type) {
     case SEND_MESSAGE:
-      let newMessage = {
-        id: 4,
-        message: state.newMessageText,
-      };
-      state.messagesData.push(newMessage);
+      let newMessage = state.newMessageText;
+      state.messagesData.push({ id: 4, message: newMessage });
       state.newMessageText ='';
       break;
     case UPDATE_NEW_MESSAGE_TEXT:

@@ -7,11 +7,11 @@ import { sendMessageActionCreator, updateNewMessageTextActionCreator } from '../
 
 
 const Dialogs = (props) => {
-  let dialogsElement = props.state.dialogsData
+  let dialogsElement = props.stateMessages.dialogsData
     .map(d => <DialogItem name={d.name} id={d.id} />);
 
-  let messagesElement = props.state.messagesData
-    .map(m => <Message message={m.message} />);
+  let messagesElement = props.stateMessages.messagesData
+    .map(m => <Message message={m.message} id={m.id} />);
 
   let newMessageElement = React.createRef();
 
@@ -32,11 +32,11 @@ const Dialogs = (props) => {
       <div className={s.messages}>
         {messagesElement}
         <div className={s.inputArea}>
-          <textarea 
-            placeholder="Введите сообщение"
+          <textarea
+            onChange={onMessageChange} 
             ref={newMessageElement} 
-            onChange={onMessageChange}
-            value={props.newMessageText}
+            value={props.stateMessages.newMessageText}
+            placeholder="Введите сообщение"
           />
           <button onClick={sendMessage}>Send</button>
         </div>

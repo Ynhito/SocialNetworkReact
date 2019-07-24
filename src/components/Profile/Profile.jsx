@@ -8,8 +8,7 @@ const Profile = (props) => {
   return (
     <section>
       <ProfileInfo />
-      <MyPosts postsData={props.state.postsData} 
-      newPostText={props.state.newPostText}
+      <MyPosts stateProfile={props.stateProfile}
       dispatch={props.dispatch} />
     </section>
   );

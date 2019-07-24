@@ -1,7 +1,6 @@
 import profileReducer from "./profile-reducer";
 import messagesReducer from "./messages-reducer";
 import friendsReducer from "./friends-reducer";
-
 let store = {
   _state: {
     profile: {
@@ -9,7 +8,7 @@ let store = {
         { id: 1, message: 'Hi, how are you' },
         { id: 2, message: 'Its my first post' }
       ],
-      newPostText: ''
+      newPostText : ''
     },
     messages: {
       dialogsData: [
@@ -23,7 +22,7 @@ let store = {
         { id: 2, message: 'Privet' },
         { id: 3, message: 'Aloha' }
       ],
-      newMessageText : ""
+      newMessageText : ''
     },
     friends: {
       friendsData: [
