@@ -13,7 +13,7 @@
 
 
 
-![1562585643793](C:\Users\2che\Downloads\1562585643793.png)
+![1562585643793](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1562585643793.png)
 
 ## Пропсы
 
