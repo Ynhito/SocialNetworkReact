@@ -147,7 +147,7 @@ let text = newPostElement.current.value;
 
 ## ReRender
 
-![1562938967001](C:\Users\2che\Downloads\1562938967001.png)
+![1562938967001](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1562938967001.png)
 
 **Файл render.js:**
 
@@ -207,7 +207,7 @@ serviceWorker.unregister();
 
 ## FLUX Концепция/Архитектура
 
-![1562940934753](C:\Users\2che\Downloads\1562940934753.png)
+![1562940934753](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1562940934753.png)
 
 **Концепция звучит так:** *Изменения в UI мире должны происходить только тогда, когда произойдут изменения в BLL мире*
 
@@ -478,7 +478,7 @@ let initialState = {
 
 Логика такова:
 
-![1564063093206](C:\Users\2che\Downloads\FOTO\1564063093206.png)
+![1564063093206](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1564063093206.png)
 
 ## Redux
 
