@@ -1,7 +1,7 @@
 import React from 'react';
 import s from './Nav.module.scss';
 import { NavLink } from 'react-router-dom';
-import FriendsList from './FriendsBar/FriendsList';
+import FriendsListContainer from './FriendsBar/FriendsListContainer';
 
 const Nav = (props) => {
   debugger
@@ -29,7 +29,7 @@ const Nav = (props) => {
         </NavLink>
         </li>
       </ul>
-      <FriendsList friendsData={props.state.friendsData} />
+      <FriendsListContainer />
     </nav>
   );
 };
