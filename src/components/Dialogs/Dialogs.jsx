@@ -5,10 +5,10 @@ import Message from './Message/Message';
 
 const Dialogs = (props) => {
   let dialogsElement = props.dialogsData
-    .map(d => <DialogItem name={d.name} id={d.id} />);
+    .map(d => <DialogItem name={d.name} key={d.id} id={d.id} />);
 
   let messagesElement = props.messagesData
-    .map(m => <Message message={m.message} id={m.id} />);
+    .map(m => <Message message={m.message} key={m.id} id={m.id} />);
 
   let newMessageElement = React.createRef();
 
