@@ -17,6 +17,7 @@ const Dialogs = (props) => {
   }
 
   let onMessageChange = () => {
+    debugger
     let text = newMessageElement.current.value;
     props.onMessageChange(text);  
   }
