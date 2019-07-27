@@ -1,0 +1,53 @@
+.users {
+  .usersContainer {
+    padding: 26px;
+    display: grid;
+    grid-row-gap: 16px;
+  
+    .userItem {
+      display: grid;
+      grid-template-columns: 1fr 4fr;
+
+      .userAva {
+        background-color: aquamarine;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-right: 10px;
+        img {
+          width: 80px;
+          height: 80px;
+        }
+      }
+
+      .userInfo {
+        background-color: rgb(140, 0, 255);
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+        grid-template-areas: 
+        "name country"
+        "status city";
+        
+        h3 {
+          grid-area: name;
+        }
+        p {
+          grid-area: status;
+        }
+        .country {
+          grid-area: country;
+        }
+        .city {
+          grid-area: city;
+        }
+      }
+    }
+  }
+
+  .showMore {
+    display: block;
+    width: 200px;
+    margin: 0 auto;
+  }
+}
+
