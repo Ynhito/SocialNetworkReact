@@ -9,19 +9,38 @@
       grid-template-columns: 1fr 4fr;
 
       .userAva {
-        background-color: aquamarine;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+        //background-color: aquamarine;
+        // display: flex;
+        // flex-direction: column;
+        // justify-content: center;
+        display: grid;
+        grid-template-columns: 1fr;
         margin-right: 10px;
         img {
           width: 80px;
           height: 80px;
+          justify-self: center;
+        }
+
+        button {
+          width: 80%;
+          justify-self: center;
+          cursor: pointer;
+          border-radius: 4px;
+          background-color: #6991ad;
+          border: none;
+          color: #fff;
+          transition: all .3s ease;
+
+          &:hover {
+            background-color: #4a76a8;
+          }
         }
       }
 
       .userInfo {
-        background-color: rgb(140, 0, 255);
+        background-color: #fff;
+        border-radius: 10px;
         display: grid;
         grid-template-columns: 3fr 1fr;
         grid-template-areas: 
@@ -30,14 +49,18 @@
         
         h3 {
           grid-area: name;
+          margin-left: 36px;
         }
-        p {
+        .status {
           grid-area: status;
+          margin-left: 36px;
         }
         .country {
+          text-align: center;
           grid-area: country;
         }
         .city {
+          text-align: center;
           grid-area: city;
         }
       }
@@ -45,9 +68,21 @@
   }
 
   .showMore {
+    padding: 7px 0;
+    font-size: 18px;
     display: block;
     width: 200px;
     margin: 0 auto;
+    cursor: pointer;
+    border-radius: 4px;
+    background-color: #6991ad;
+    border: none;
+    color: #fff;
+    transition: all .3s ease;
+
+    &:hover {
+      background-color: #4a76a8;
+    }
   }
 }
 

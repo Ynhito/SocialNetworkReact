@@ -30,7 +30,7 @@ const Users = (props) => {
       <div className={s.usersContainer}>
         {userElement}
       </div>
-      <button className={s.showMore}>Нажать</button>
+      <button className={s.showMore}>Show more</button>
     </div>
   );
 }

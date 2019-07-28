@@ -24,9 +24,9 @@ const UserItem = (props) => {
 
             <div className={s.userInfo}>
                 <h3> {props.fullName} </h3>
-                <p> {props.status} </p>
-                <span className={s.county}> {props.location.country} </span>
-                <span className={s.city}> {props.location.city} </span>
+                <p className={s.status}> {props.status} </p>
+                <p className={s.country}> {props.location.country} </p>
+                <p className={s.city}> {props.location.city} </p>
             </div>
             
         </div>

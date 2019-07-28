@@ -605,6 +605,266 @@ const Dialogs = (props) => {
 
 export default Dialogs;
 ```
+## REACT-REDAX
+
+React-redax это библиотека, позволяющая react работать с redax инкапсулируя все детали.
+
+*Давайте вспомним как мы жили раньше, до этой библиотеки.*
+
+**Context API**
+
+Как это было раньше. Мы использовали функцию reRenderEntireTree. Вызывали её в index.js во время старта и также передавали её как callback subscribe'у если требовалось отрисовать дерево заново, если изменялся state. 
+
+**Index.js**
+
+```javascript
+import './index.css';
+import * as serviceWorker from './serviceWorker';
+import store from './redux/redux-store';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from './StoreContext';
+let reRenderEntireTree = (state) => {
+  ReactDOM.render(
+    <BrowserRouter>
+      <Provider store={store}>
+        <App state={store.getState()}  />
+      </Provider>
+    </BrowserRouter>, document.getElementById('root'));
+}
+
+reRenderEntireTree(store.getState());
+store.subscribe(() => {
+  let state = store.getState();
+  reRenderEntireTree(state);
+});
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister();
+
+```
+
+Также мы использовали файл StoreContext для работы с ContextAPI. Мы создавали собственную компоненту Provider внутрь которой передавали store через value с помощью ContextAPI.
+
+И использовали компоненту Provider внутри index.js
+
+Это позволяло давать доступ контейнерным компонентам к store без необходимости прокидывать его через props.
+
+**StoreContext.js**
+
+```javascript
+import React from 'react';
+
+const StoreContext = React.createContext(null);
+
+export const Provider = (props) => {
+  return (
+    <StoreContext.Provider value={props.store}>
+      {props.children}
+    </StoreContext.Provider>
+  );
+}
+
+export default StoreContext;
+```
+
+**ContainerComponent**
+
+При создании контейнерной компоненты нам приходилось возвращать разметку внутри StoreContext.Consumer'a. Там же нам приходилось получать state через getState() и dispatch'и. Чтобы всё это передать в презентационную компоненту через пропсы.
+
+**DialogsContainer.js**
+
+```javascript
+import React from 'react';
+import { sendMessageActionCreator, updateNewMessageTextActionCreator } from '../../redux/messages-reducer';
+import Dialogs from './Dialogs';
+import StoreContext from '../../StoreContext';
+
+
+const DialogsContainer = (props) => {
+  return (
+    <StoreContext.Consumer > 
+    {
+      (store) => {
+        let state = store.getState();
+
+        let sendMessage = () => {
+          store.dispatch(sendMessageActionCreator());
+        }
+
+        let onMessageChange = (text) => {
+          store.dispatch(updateNewMessageTextActionCreator(text));
+        }
+        return (
+          <Dialogs
+            sendMessage={sendMessage}
+            onMessageChange={onMessageChange}
+            dialogsData={state.messages.dialogsData}
+            messagesData={state.messages.messagesData}
+            newMessageText={state.messages.newMessageText}
+          />
+        )
+      }
+    }
+    </StoreContext.Consumer>
+  );
+}
+
+export default DialogsContainer;
+```
+
+**Давайте же взглянем, как проста стала жизнь!**
+
+**ContextAPI**
+
+1) Удаляем файл StoreContext.js. Он нам больше не нужен.
+
+2)  Удаляем функцию reRenderEntireTree в index.js! Она нам также больше не нужна.
+
+3) Компоненту Provider оставляем, но импортируем её уже не через StoreContext, а через react-redax.
+
+```javascript
+import './index.css';
+import * as serviceWorker from './serviceWorker';
+import store from './redux/redux-store';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+
+ReactDOM.render(
+  <BrowserRouter>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </BrowserRouter>, document.getElementById('root'));
+
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister();
+
+```
+
+**ContainerComponent**
+
+Создание контейнерным компонент ещё не было настолько простым!
+
+1) const UsersContainer = connect(mapStateToProps, mapDispatchToProps)(Users);
+
+Одна строчка и компонента создана. 
+
+Функция connect, импортированная из react-redax, что она делает?
+
+Во-первых, как мы помним, мы удалили функцию reRenderEntireTree для перерисовки и отрисовки дерева. Connect делает всё это сам. **И делает намного лучше!** Он не перерисовывает всё дерево при изменении в одной компоненте, он перерисовывает **только эту компоненту**. 
+
+Во-вторых, она обеспечивает самый простой способ передачи state и dispatch в презентационную компоненту.
+
+**Connect вызывается дважды**. В первый раз она вызывается принимая в качестве параметров две функции **mapStateToProps** и **mapDispatchToProps**. Их названия говорят за них сами. 
+
+**mapStateToProps** принимает **state** и возвращает объект ключ-значение в ЗНАЧЕНИИ атрибут-данные.
+
+Проще показать на примере:
+
+Это
+
+```html
+<Users users={state.users.usersData} />
+```
+
+Равно этому
+
+```javascript
+let mapStateToProps = (state) => {
+    return {
+        usersData: state.users.usersData
+    }
+}
+```
+
+Тоже самое с dispath
+
+**mapDispatchToProps** принимает dispatch на вход
+
+Это 
+
+```html
+let follow = (userId) => {
+	store.dispatch(followAC(userId));
+}
+
+ <Dialogs follow={follow} />
+```
+
+Равно этому 
+
+```javascript
+let mapDispatchToProps = (dispatch) => {
+	return {
+		follow: (userId) => {
+			dispatch(followAC(userId));
+	},
+}
+```
+
+Как работает двойной вызов?
+
+```javascript
+Connect(result=a+b)(result=props.result)
+```
+
+Первый раз функция считает логику в первых скобках, далее результат этих скобок он передаёт во вторые. Второй раз функция выполниться только после выполнения первого раза, и возьмёт на вход результат первого выполнения.
+
+Тоже самое происходит здесь:
+
+```javascript
+const UsersContainer = connect(mapStateToProps, mapDispatchToProps)(Users);
+```
+
+Выполняются функции mapStateToProps и mapDispatchToProps. Они возвращают объекты с  данными и функциями. Далее эти функции переходят на вход Users в виде props. Компоненте, которая как мы уже знаем также является функцией.
+
+**UsersContainer.jsx**
+
+```javascript
+import { connect } from 'react-redux';
+import Users from './Users';
+import { followAC, unFollowAC, setUsersAC } from '../../redux/users-reducer';
+
+let mapStateToProps = (state) => {
+    return {
+        usersData: state.users.usersData
+    }
+}
+
+let mapDispatchToProps = (dispatch) => {
+    return {
+        follow: (userId) => {
+            dispatch(followAC(userId));
+        },
+        unfollow: (userId) => {
+            dispatch(unFollowAC(userId));
+        },
+        setUsers: (users) => {
+            dispatch(setUsersAC(users));
+        }
+    }
+}
+
+const UsersContainer = connect(mapStateToProps, mapDispatchToProps)(Users);
+
+export default UsersContainer;
+```
+
+# 
+
 # deep copy vs shallow copy
 
 Пойми одно, это БАЗА. База, которую ты должен знать.
