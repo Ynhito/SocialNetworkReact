@@ -1,24 +1,23 @@
 import React from 'react';
 import s from './Users.module.scss';
 import UserItem from './UserItem/UserItem';
+import Axios from 'axios';
 
 const Users = (props) => {
   if (props.usersData.length === 0) {
-    props.setUsers(
-      [
-        { id: 1, photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/768px-Circle-icons-profile.svg.png', followed: true, fullName: 'Dmitry', status: 'Hello world', location: { city: 'Omsk', country: 'Russia' } },
-        { id: 2, photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/768px-Circle-icons-profile.svg.png', followed: true, fullName: 'Julia', status: 'I am women', location: { city: 'Omsk', country: 'Russia' } },
-        { id: 3, photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/768px-Circle-icons-profile.svg.png', followed: false, fullName: 'Vlad', status: 'I in army', location: { city: 'Chita', country: 'Russia' } },
-        { id: 4, photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/768px-Circle-icons-profile.svg.png', followed: false, fullName: 'Boris', status: 'I am cat', location: { city: 'Nazyvaevsk', country: 'Russia' } }
-      ]
-    )
+
+    Axios.get('https://social-network.samuraijs.com/api/1.0/users')
+      .then(response => {
+        debugger
+        props.setUsers(response.data.items)
+      })
   }
   let userElement = props.usersData
     .map(u => <UserItem
-      fullName={u.fullName}
+      fullName={u.name}
       status={u.status}
-      location={u.location}
-      photoUrl={u.photoUrl}
+      //location={u.location}
+      photos={u.photos}
       followed={u.followed}
       follow={props.follow}
       unfollow={props.unfollow}

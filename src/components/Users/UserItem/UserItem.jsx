@@ -1,5 +1,6 @@
 import React from 'react';
 import s from './../Users.module.scss';
+import userPhoto from '../../../assets/images/768px-Circle-icons-profile.svg.png';
 
 const UserItem = (props) => {
 
@@ -15,7 +16,7 @@ const UserItem = (props) => {
         <div className={s.userItem}>
 
             <div className={s.userAva}>
-                <img src={props.photoUrl} alt="ava"/>
+                <img src={props.photos.small !== null ? props.photos.small : userPhoto } alt="ava"/>
                 {props.followed ? 
                 <button onClick={unfollow}>Unfollow</button> 
                 : 
@@ -25,8 +26,8 @@ const UserItem = (props) => {
             <div className={s.userInfo}>
                 <h3> {props.fullName} </h3>
                 <p className={s.status}> {props.status} </p>
-                <p className={s.country}> {props.location.country} </p>
-                <p className={s.city}> {props.location.city} </p>
+                {/* <p className={s.country}> {props.location.country} </p> */}
+                {/* <p className={s.city}> {props.location.city} </p> */}
             </div>
             
         </div>
