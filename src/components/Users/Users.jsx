@@ -1,12 +1,12 @@
 import React from 'react';
 import s from './Users.module.scss';
-import UserItem from './UserItem/UserItem';
+import UserItem from './UserItem/UserItemS';
 import Axios from 'axios';
 
 const Users = (props) => {
   if (props.usersData.length === 0) {
 
-    Axios.get('https://social-network.samuraijs.com/api/1.0/users')
+    Axios.get('https://social-network.samuraijs.com/api/1.0/users?count=4')
       .then(response => {
         debugger
         props.setUsers(response.data.items)
@@ -16,7 +16,6 @@ const Users = (props) => {
     .map(u => <UserItem
       fullName={u.name}
       status={u.status}
-      //location={u.location}
       photos={u.photos}
       followed={u.followed}
       follow={props.follow}

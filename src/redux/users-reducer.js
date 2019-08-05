@@ -3,12 +3,7 @@ const UNFOLLOW = 'UNFOLLOW';
 const SET_USERS = 'SET_USERS';
 
 let initialState = {
-  usersData: [
-    // { id: 1, photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/768px-Circle-icons-profile.svg.png', followed: true, fullName: 'Dmitry', status: 'Hello world', location: { city: 'Omsk', country: 'Russia' } },
-    // { id: 2, photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/768px-Circle-icons-profile.svg.png', followed: true, fullName: 'Julia', status: 'I am women', location: { city: 'Omsk', country: 'Russia' } },
-    // { id: 3, photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/768px-Circle-icons-profile.svg.png', followed: false, fullName: 'Vlad', status: 'I in army', location: { city: 'Chita', country: 'Russia' } },
-    // { id: 4, photoUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/768px-Circle-icons-profile.svg.png', followed: false, fullName: 'Boris', status: 'I am cat', location: { city: 'Nazyvaevsk', country: 'Russia' } }
-  ]
+  usersData: []
 };
 
 const usersReducer = (state = initialState, action) => {
