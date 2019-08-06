@@ -48,7 +48,7 @@ class Users extends React.Component {
         </div>
         <div className={s.pageNav}>
           {pages.map(p => {
-            return <button onClick={ (e) => this.onPageSelected(p)} className={this.props.currentPage === p && s.selectedPage}>{p}</button>
+            return <button onClick={ (e) => this.onPageSelected(p)} className={this.props.currentPage === p ? s.selectedPage : s.btnPage}>{p}</button>
           })}
         </div>
         <button className={s.showMore}>Show more</button>
