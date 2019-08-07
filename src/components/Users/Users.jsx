@@ -14,7 +14,11 @@ const Users = (props) => {
   return (
     <div className={s.users}>
       <div className={s.usersContainer}>
-        {props.usersData
+        { props.isFetching ? 
+        <div className={s.spinner}></div>
+        :
+        null }
+        { props.isFetching ? null : props.usersData
           .map(u => <UserItem
             fullName={u.name}
             status={u.status}
