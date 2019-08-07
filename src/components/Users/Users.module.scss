@@ -87,6 +87,7 @@
       cursor: pointer;
       border: none;
       transition: all .3s ease-in-out;
+      border-radius: 4px;
 
       &:not(:last-child) {
         margin: 2px;
@@ -94,6 +95,7 @@
 
       &:hover {
         background-color: #4a76a8;
+        transform: scale(1.4)
       }
     }
 

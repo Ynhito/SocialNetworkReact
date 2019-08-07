@@ -1014,3 +1014,238 @@ b.students = [...a.students]
 **При сравнении двух ссылок, (без копирования, просто let b = a). Ссылки будут равны, ибо они ссылаются на один и тот же объект.**
 
 **При сравнении примитивов внутри ссылок a.classrom.teacher.name === bclassrom.teacher.name будут сравниваться значения примитивов.**
+
+## Axios, jQuery Ajax
+
+**jQuery**
+
+Что такое промис? Помню себя, понять не мог ничего. Смотрел уроки... Обещание, это обещание говорили они. Я не понимал НИХЕРА. Что за обещание. Мы о чём. Но вот настал момент когда и я понял что это такое.
+
+Давайте по бумажке, promise  - это обещание, которое даёт dal - ui, что возьмёт с сервера данные, взяв их оттуда, он передаёт их в виде того обещания, что он дал ранее. 
+
+![1564427302517](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1564427302517.png)
+
+```javascript
+const resultBlock = document.querySelector('#result');
+
+const clickMeButton = document.querySelector('#click-me');
+
+const pageNumberEl = document.querySelector('#page-number');
+
+clickMeButton.addEventListener('click', () => {
+  const promise = getImagesOld();
+  promise
+    .then((promise) => console.log(promise))
+})
+
+function getImagesOld() {
+  const promise = $.ajax(`https://api.unsplash.com/photos/random/?client_id=818fcd1d1047300379afae3e5c33cb9cd88b68d7d81253632ba4e09a331246a5&count=30`)
+  return promise;
+}
+
+const successGet = (data) => {
+  data.forEach(el => {
+    const img = document.createElement('img');
+    img.src = el.urls.thumb;
+    document.querySelector('#result').appendChild(img)
+  });
+}
+```
+
+Синтаксис Ajax jQuery таков:
+
+```javascript
+$.ajax(url, {settings})
+```
+
+settings  имеют вид ключ-значение. Самое основное success. Как это звучит:
+
+*Как только придёт УСПЕШНЫЙ ответ с сервера выполниться это...*
+
+success'у можно передать callback функцию
+
+```javascript
+const promise = $.ajax(`https://api.unsplash.com/photos/random/?client_id=818fcd1d1047300379afae3e5c33cb9cd88b68d7d81253632ba4e09a331246a5&count=30`, {
+	success: successFunction
+})
+```
+
+Ах да, промисы, мы же про них говорим. Дело в том что строчка:
+
+```javascript
+$.ajax(`https://api.unsplash.com/photos/random/?client_id=818fcd1d1047300379afae3e5c33cb9cd88b68d7d81253632ba4e09a331246a5&count=30`)
+```
+
+Возвращает тот самый промис, это он и есть
+
+```javascript
+function getImagesOld() {
+  const promise = $.ajax(`https://api.unsplash.com/photos/random/?client_id=818fcd1d1047300379afae3e5c33cb9cd88b68d7d81253632ba4e09a331246a5&count=30`)
+  return promise;
+}
+```
+
+## GET, POST, PUT, DELETE
+
+**Query String Parameters** используются только для **GET** и **DELETE**
+
+Query String Parameters - это параметры, которые передаются таким образом:
+
+```http
+https://website/api/tasks?taskId=123&title=text
+```
+
+То есть сначала идёт endpoint, затем ставится вопросительный знак(?) и передаются параметры:
+
+хттпс://website/?параметр=значение
+
+Если этих параметров несколько, то после каждого значения нужно ставить амперсант (&)
+
+параметр=значение&параметр2=значение2
+
+При использовании POST и PUT запросов нужно использовать тело запроса **request payload**
+
+**axios**
+
+```javascript
+function postTasksAxios() {
+  const promise = axios.post(APIkeyTasksPost, {
+    widgetId : 85429,
+    title : 'ZAKAZAKA'
+  })
+  return promise.then(response => response.data)
+}
+```
+
+**fetch** 
+
+```javascript
+async function postTasksFetch () {
+  const response = await fetch(APIkeyTasksPost + '&title=WorkOut', {method: 'POST'});
+  const data = await response.json();
+  return data;
+}
+```
+
+## Class
+
+[class extends React.Component](https://github.com/Dvachee/SocialNetworkReact/commit/8c264525183ab242eed19b8c017d62010e2addb9)
+
+**Что такое класс? Что такое конструктор? Что это за слово такое new?**
+
+Для начала давайте вспомним ООП. А именно контекст вызова **this**. Это слово говорит о том, с чьего имени будет вызываться свойство или метод в объекте. 
+
+создадим функцию
+
+```javascript
+function Man2(name, age) {
+  this.name = name;
+  this.age = age;
+}
+```
+
+На что указывает this внутри функции? Ни на что... Пока её не вызвать
+
+```javascript
+Man2('Dimon', 8)
+```
+
+Если просто вызвать данную функцию, то контекстом вызова вызова будет являться глобальный объект window
+
+Это легко можно проверить в консоли браузера после вызова данной функции
+
+![1565187371752](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1565187371752.png)
+
+Т.е теперь наши name и age - это новые ключи объекта window, а их значения - это параметры функции Man2
+
+Пришло время воспользоваться словом new
+
+создадим переменную и приравняем её вызову функции Man2 напечатав изначально слово new
+
+```javascript
+let m3 = new Man2('Dima', 31);
+```
+
+![1565187623311](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1565187623311.png)
+
+И мы видим что в консоль вывелся **ОБЪЕКТ** с **КЛАССОМ** Man2
+
+В sources это выглядит так
+
+![1565187882877](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1565187882877.png)
+
+Если бы мы создали этот объект через литерал объекта, то мы бы увидели такую картину
+
+![1565187791164](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1565187791164.png)
+
+А в sources было бы написано object
+
+![1565187836760](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1565187836760.png)
+
+Используя слово new можно создавать неограниченное количество **ЭКЗЕМПЛЯРОВ** класса **Man2**
+
+Прошу заметить что в данном случае контекстом вызова является переменная к которой мы приравниваем функцию с помощью **new**
+
+#### Классы в *JavaScript* были введены в ECMAScript 2015
+
+Давайте проделаем аналогичные действия с помощью классов
+
+```javascript
+class Man2 {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+}
+```
+
+Первое что мы видим что мы видим это то, что в роли нашей функции Man2 играет встроенный метод constructor. Теперь мы знаем как это называется, конструктор. Мы собирали конструктор. 
+
+Man2 же ушло немного выше и говорит само за себя, теперь это class.
+
+Ниже конструктора нужно писать все свои методы для работы с данными, которые мы ввели в конструктор
+
+Вот пример кода
+
+```javascript
+class Man {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+    this.people = [
+      {name: 'Dima', age: 18},
+      {name: 'Julia', age: 19}
+    ];
+    this.Manelement = this.people.map(m => {
+      const man = document.createElement('li');
+      man.innerHTML = m.name;
+      document.querySelector('#resultTask').appendChild(man)
+    })
+  }
+
+  render() {
+    return this.Manelement
+  }
+}
+```
+
+Мы создали метод render который возвращает Manelement
+
+Чтобы начать им пользоваться, нужно проделать все те же шаги
+
+```javascript
+let m1 = new Man('Dima', 31)
+```
+
+Теперь от имени m1 можно вызвать метод render
+
+```javascript
+m1.render();
+```
+
+Вот и всё.
+
+Для чего нам нужны классы в React'е? А для того, чтобы сохранять чистоту функциональных компонент. Чистая функциональная компонента должна только принимать данные и возвращать ИХ ЖЕ. Она не должна делать запросы на сервер, не должна делать ничего кроме как возвращать **JSX разметку**
+
+В этом нам и помогает классовая компонента
+
