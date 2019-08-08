@@ -20,12 +20,10 @@
     .userItem {
       display: grid;
       grid-template-columns: 1fr 4fr;
+      animation-name: example;
+      animation-duration: .3s;
 
       .userAva {
-        //background-color: aquamarine;
-        // display: flex;
-        // flex-direction: column;
-        // justify-content: center;
         display: grid;
         grid-template-columns: 1fr;
         margin-right: 10px;
@@ -131,3 +129,11 @@
       transform: rotate(360deg);
   }
 }
+
+@keyframes example {
+  0% {opacity: 0;}
+  25% {opacity: 0.3;}
+  50% {opacity:0.5;}
+  75% {opacity:0.7;}
+  100% {opacity:1;}
+ }
