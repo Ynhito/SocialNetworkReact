@@ -1,37 +1,35 @@
 import React from 'react';
 import s from './../Users.module.scss';
 import userPhoto from '../../../assets/images/768px-Circle-icons-profile.svg.png';
+import { NavLink } from 'react-router-dom';
 
-class UserItem extends React.Component {
+const UserItem = (props) => {
 
-  follow = () => {
-    this.props.follow(this.props.id);
+  let follow = () => {
+    props.follow(props.id);
   }
 
-  unfollow = () => {
-    this.props.unfollow(this.props.id);
+  let unfollow = () => {
+    props.unfollow(props.id);
   }
-
-  render() {
-    return (
-      <div className={s.userItem}>
-
+  return (
+    <NavLink to={'/profile/' + props.id}>
+    <div className={s.userItem}>
         <div className={s.userAva}>
-          <img src={this.props.photos.small !== null ? this.props.photos.small : userPhoto} alt="ava" />
-          {this.props.followed ?
-            <button onClick={this.unfollow}>Unfollow</button>
+          <img src={props.photos.small !== null ? props.photos.small : userPhoto} alt="ava" />
+          {props.followed ?
+            <button onClick={unfollow}>Unfollow</button>
             :
-            <button onClick={this.follow}>Follow</button>}
+            <button onClick={follow}>Follow</button>}
         </div>
 
         <div className={s.userInfo}>
-          <h3> {this.props.fullName} </h3>
-          <p className={s.status}> {this.props.status} </p>
+          <h3> {props.fullName} </h3>
+          <p className={s.status}> {props.status} </p>
         </div>
-
-      </div>
-    );
-  }
+    </div>
+    </NavLink>
+  );
 }
 
 export default UserItem;

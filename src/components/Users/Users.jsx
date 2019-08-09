@@ -1,6 +1,7 @@
 import React from 'react';
 import s from './Users.module.scss';
 import UserItem from './UserItem/UserItem';
+import Preloader from '../../assets/common/preloader/preloader';
 
 const Users = (props) => {
 
@@ -15,7 +16,7 @@ const Users = (props) => {
     <div className={s.users}>
       <div className={s.usersContainer}>
         { props.isFetching ? 
-        <div className={s.spinner}></div>
+        <Preloader />
         :
         null }
         { props.isFetching ? null : props.usersData

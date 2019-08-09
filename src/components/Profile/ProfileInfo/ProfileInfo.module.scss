@@ -1,20 +1,78 @@
 .ProfileInfo {
-  
-  .imageBackground {
-    width: 100%;
-    height: 250px;
-  }
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-column-gap: 15px;
+  margin-bottom: 15px;
 
-  .discription_block {
-    padding: 10px;
-    display: flex;
+  .ava_follow_block {
     background-color: #fff;
-    border-radius: 4px;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    
+    img {
+      margin-bottom: 10px;
+      border-radius: 2px;
+    }
 
-    .imageAvatar {
-      border-radius: 50%;
+    button {
+      font-size: 1.6rem;
+      cursor: pointer;
+      border-radius: 4px;
+      background-color: #6991ad;
+      border: none;
+      color: #fff;
+      transition: all .3s ease;
+
+      &:hover {
+        background-color: #4a76a8;
+      }
     }
   }
+  
+  .discription_block {
+    padding: 15px 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 4px;
+    
+    .discription_block_top {
+      padding-bottom: 15px;
+      border-bottom: 1px solid #e7e8ec;
+
+      .fullName {
+        margin: 0;
+        font-size: 24px;
+      }
+      .status {
+        color: #939393;
+      }
+    }
+
+    .short_info {
+      padding-top: 15px;
+
+      .lookingJobStatus_row {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        .lookingJob {
+          color: #939393;
+          font-size: 18px;
+        }
+      }
+      .lookingJobDiscription_row {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        margin-top: 15px;
+        .lookingJob_discription {
+          color: #939393;
+          font-size: 18px;
+        }
+      }
+    }
+    
+  }
 }
+
+// 
