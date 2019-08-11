@@ -1249,3 +1249,208 @@ m1.render();
 
 В этом нам и помогает классовая компонента
 
+## withRouter
+
+Давайте попробуем разобраться с функцией withRouter, понять как она работает и для чего.
+
+Сначала в коде:
+
+UserItem.jsx
+
+```javascript
+import React from 'react';
+import s from './../Users.module.scss';
+import userPhoto from '../../../assets/images/768px-Circle-icons-profile.svg.png';
+import { NavLink } from 'react-router-dom';
+
+const UserItem = (props) => {
+
+  let follow = () => {
+    props.follow(props.id);
+  }
+
+  let unfollow = () => {
+    props.unfollow(props.id);
+  }
+  return (
+    <NavLink to={'/profile/' + props.id}>
+    <div className={s.userItem}>
+        <div className={s.userAva}>
+          <img src={props.photos.small !== null ? props.photos.small : userPhoto} alt="ava" />
+          {props.followed ?
+            <button onClick={unfollow}>Unfollow</button>
+            :
+            <button onClick={follow}>Follow</button>}
+        </div>
+
+        <div className={s.userInfo}>
+          <h3> {props.fullName} </h3>
+          <p className={s.status}> {props.status} </p>
+        </div>
+    </div>
+    </NavLink>
+  );
+}
+
+export default UserItem;
+```
+
+Мы обернули каждого пользователя на странице Users в тег NavLink, указав путь 
+
+```javascript
+to={'/profile/' + props.id}
+```
+
+Мы кликаем на этого пользователя. Далее в файле App.js Route отслеживает изменение url адреса по пути /profile и отрисовывает компоненту ProfileContainer
+
+```javascript
+import React from 'react';
+import './App.scss';
+import Header from './components/Header/Header';
+import Nav from './components/Nav/Nav';
+import {Route} from 'react-router-dom';
+import DialogsContainer from './components/Dialogs/DialogsContainer';
+import UsersContainer from './components/Users/UsersContainer';
+import ProfileContainer from './components/Profile/ProfileContainer';
+
+const App = (props) => {
+  return (
+      <div className='app-wrapper'>
+        <Header />
+        <Nav />
+
+        <div className='app-wrapper-content'>
+
+          <Route path='/profile' render={ () => <ProfileContainer />} />
+          <Route path='/dialogs' render={ () => <DialogsContainer />} />
+          <Route path='/users' render={ () => <UsersContainer /> } />
+
+        </div>
+      </div>
+  );
+}
+
+export default App;
+
+```
+
+Идём внутрь ProfileContainer
+
+```javascript
+import React from 'react';
+import Profile from './Profile';
+import Axios from 'axios';
+import {connect} from 'react-redux';
+import {setUserProfile} from '../../redux/profile-reducer';
+import { withRouter } from 'react-router-dom';
+
+
+class ProfileContainer extends React.Component {
+  componentDidMount() {
+    Axios.get(`https://social-network.samuraijs.com/api/1.0/profile/2`)
+      .then(response => {
+        this.props.setUserProfile(response.data);
+      })
+  }
+
+  render() {
+    return (
+      <Profile {...this.props}
+      profileData={this.props.profileData}
+      />
+    );  
+  }
+}
+
+const mapStateToProps = (state) => {
+  return {
+    profileData: state.profile.profileData
+  }
+};
+
+const mapDispatchToProps = {
+  setUserProfile
+}
+
+let withRouterProfileContainer = withRouter(ProfileContainer);
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouterProfileContainer);
+```
+
+Давайте вспомним для чего нужна функция connect. Она принимает в качестве параметров данные из state и action creator, чтобы задиспатчить их в reducer. Осуществляет она это с помощью функций, которые возвращают объект, либо же в случае с dispatch можно использовать готовый объект созданный с помощью литерала объекта. Ибо connect может сам dispatch-ить данные.
+
+В компоненту данные и actioncreators приходят в виде props
+
+connect на выходе выбрасывает новую компоненту
+
+**Ну так вот**. 
+
+Функция withRouter очень похожа на connect. Отличие в том, что connect имеет связь со store, а withRouter имеет связь с url данными.
+
+withRouter принимает в качестве только компоненту, и выбрасывает новую.
+
+Но передаёт в неё свои данные. **ТАКЖЕ С ПОМОЩЬЮ props**
+
+**Ну так вот X2**
+
+Попав в данный файл мы видим что здесь задана классовая компонента, **НО** она не экспортируется. Т.е по сути вызывать будут не её. 
+
+Для начала создадим над ней контейнерную компоненту для работы с Router. Назовём её withRouterProfileContainer
+
+```javascript
+let withRouterProfileContainer = withRouter(ProfileContainer);
+```
+
+А далее, используя функцию connect, обернём withRouterProfileContainer в ещё одну компоненту
+
+```javascript
+export default connect(mapStateToProps, mapDispatchToProps)(withRouterProfileContainer);
+```
+
+И вот её то уже и экспортируем по default.
+
+И именно она вызовется в App.js. Давайте взглянем на наши пропсы теперь
+
+![1565517952176](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1565517952176.png)
+
+Теперь помимо profileData и setUserProfile к нам приходит множество новых данных. Но самое главное находится в match.
+
+- isExact говорит о точном совпадении адреса указанном в Route и адреса, который прописан в данный момент. False потому, что в App.js указан путь /profile, а у нас сейчас /profile/8
+
+- path - путь, указанный в app.js
+- url - текущий адрес(Может показаться что они совпадают, но нет, просто наш параметр 8 не определяется)
+
+- params - объект с параметрами. Сейчас их нет. Чтобы это исправить нужно сделать это:
+
+  ```javascript
+  <Route path='/profile/:userId?' render={ () => <ProfileContainer />} />
+  
+  ```
+
+Добавить :userId после слэша. А также ? что будет значить что данный параметр опциональный
+
+Давайте снова глянем на props
+
+![1565518489591](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1565518489591.png)
+
+Теперь isExact  - true и в params есть ключ userId со значением 8
+
+Всё что нам остаётся сделать это достать эту 8ку из пропсов и вставить в API key при get запросе
+
+и поставить условие, если параметр не задан и мы переходим просто по /profile
+
+```javascript
+componentDidMount() {
+    let userId = this.props.match.params.userId;
+    if (!userId) {
+      userId = 2;
+    };
+    Axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${userId}`)
+      .then(response => {
+        this.props.setUserProfile(response.data);
+      })
+  }
+```
+
+**Вот и всё!)**
+
