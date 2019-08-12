@@ -6,7 +6,7 @@ const Profile = (props) => {
 
   return (
     <section>
-      <ProfileInfo profileData={props.profileData} />
+      <ProfileInfo profileData={props.profileData} isFetching={props.isFetching} />
       <MyPostsContainer />
     </section>
   );

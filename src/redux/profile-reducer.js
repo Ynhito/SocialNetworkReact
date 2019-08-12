@@ -1,6 +1,7 @@
 const ADD_POST = 'ADD-POST';
 const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
+const TOGGLE_IS_FETCHING_PROFILE = 'TOGGLE_IS_FETCHING_PROFILE';
 
 let initialState = {
   postsData: [
@@ -8,11 +9,12 @@ let initialState = {
     { id: 2, message: 'Its my first post' }
   ],
   profileData: null,
-  newPostText : ''
+  newPostText: '',
+  isFetching: false
 };
 
 const profileReducer = (state = initialState, action) => {
-  switch(action.type) {
+  switch (action.type) {
     case ADD_POST:
       let newPost = {
         id: 3,
@@ -20,31 +22,40 @@ const profileReducer = (state = initialState, action) => {
       };
       return {
         ...state,
-        postsData : [...state.postsData, newPost ],
+        postsData: [...state.postsData, newPost],
         newPostText: ''
       };
-    case UPDATE_NEW_POST_TEXT: 
+    case UPDATE_NEW_POST_TEXT:
       return {
         ...state,
         newPostText: action.newText
       };
-    case SET_USER_PROFILE: 
+    case SET_USER_PROFILE:
       return {
         ...state,
         profileData: action.profileData
       };
+    case TOGGLE_IS_FETCHING_PROFILE:
+      return {
+        ...state,
+        isFetching: action.isFetching
+      }
     default:
       return state;
   }
-  
+
 }
 
-export let addPostActionCreator = () => ({type: ADD_POST});
+export let addPostActionCreator = () => ({ type: ADD_POST });
 export let updateNewPostTextActionCreator = (text) => ({
-  type: UPDATE_NEW_POST_TEXT, 
-  newText: text});
+  type: UPDATE_NEW_POST_TEXT,
+  newText: text
+});
 export let setUserProfile = (profileData) => ({
-  type: SET_USER_PROFILE, 
-  profileData});
+  type: SET_USER_PROFILE,
+  profileData
+});
+export let toggleIsFetchingProfile = (isFetching) => ({ type: TOGGLE_IS_FETCHING_PROFILE, isFetching });
+
 
 export default profileReducer;

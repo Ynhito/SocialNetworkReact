@@ -6,11 +6,13 @@ const ProfileInfo = (props) => {
 
   if (!props.profileData) {
     return <Preloader />
+  } else if (props.isFetching === true) {
+    return <Preloader />
   }
+
 
   return (
     <div className={s.ProfileInfo}>
-
       <div className={s.ava_follow_block}>
         <img className={s.imageAvatar} src={props.profileData.photos.large} alt="Avatar" />
         <button>Follow</button>

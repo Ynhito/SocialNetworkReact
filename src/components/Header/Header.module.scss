@@ -3,9 +3,31 @@
   background-color: #4a76a8;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  img {
+    width: 20px;
+  }
+
+  .spinner {
+    width: 45px;
+    height: 45px;
+    border: 5px solid;
+    border-radius: 50%;
+    border-left-color: transparent;
+    border-top-color: #fff;
+    border-right-color: #6991ad;
+    border-bottom-color: #4a76a8;
+    animation: spin 500ms infinite linear;
+  }
+
+  .loginBlock {
+    
+  }
 }
 
-.header img {
-  width: 20px;
-  margin-left: 40px;
+@keyframes spin {
+  100%{
+      transform: rotate(360deg);
+  }
 }
