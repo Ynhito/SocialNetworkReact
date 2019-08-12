@@ -1454,3 +1454,4 @@ componentDidMount() {
 
 **Вот и всё!)**
 
+![1565524485562](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1565524485562.png)
