@@ -14,13 +14,17 @@
         display: grid;
         grid-template-columns: 1fr;
         margin-right: 10px;
-        img {
-          width: 80px;
-          height: 80px;
-          justify-self: center;
+        a {
+          display: flex;
+          justify-content: center;
+          img {
+            width: 80px;
+            height: 80px;
+            //justify-self: center;
+          }
         }
-
         button {
+          margin-top: 7px;
           width: 80%;
           justify-self: center;
           cursor: pointer;
@@ -97,7 +101,7 @@
     font-size: 18px;
     display: block;
     width: 200px;
-    margin: 0 auto;
+    margin: 15px auto;
     cursor: pointer;
     border-radius: 4px;
     background-color: #6991ad;
@@ -111,10 +115,18 @@
   }
 }
 
-@keyframes example {
+@keyframes example2 {
   0% {opacity: 0;}
   25% {opacity: 0.3;}
   50% {opacity:0.5;}
   75% {opacity:0.7;}
   100% {opacity:1;}
+ }
+
+ @keyframes example {
+  0% {transform: scale(0);}
+  25% {transform: scale(0.3);}
+  50% {transform: scale(0.5);}
+  75% {transform: scale(0.7);}
+  100% {transform: scale(1);}
  }

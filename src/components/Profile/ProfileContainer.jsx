@@ -13,10 +13,8 @@ class ProfileContainer extends React.Component {
       userId = 1375;
     };
     this.props.toggleIsFetchingProfile(true);
-    debugger
     Axios.get(`https://social-network.samuraijs.com/api/1.0/profile/${userId}`)
       .then(response => {
-        debugger
         this.props.toggleIsFetchingProfile(false);
         this.props.setUserProfile(response.data);
       })

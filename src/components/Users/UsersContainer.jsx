@@ -8,7 +8,9 @@ class UsersContainer extends React.Component {
 
   componentDidMount() {
     this.props.toggleIsFetching(true);
-    Axios.get(`https://social-network.samuraijs.com/api/1.0/users?count=${this.props.pageSize}&page=${this.props.currentPage}`)
+    Axios.get(`https://social-network.samuraijs.com/api/1.0/users?count=${this.props.pageSize}&page=${this.props.currentPage}`, {
+      withCredentials: true
+    })
       .then(response => {
         this.props.toggleIsFetching(false);
         this.props.setUsers(response.data.items)
@@ -19,7 +21,9 @@ class UsersContainer extends React.Component {
   onPageSelected = (pageNumber) => {
     this.props.setCurrentPage(pageNumber);
     this.props.toggleIsFetching(true);
-    Axios.get(`https://social-network.samuraijs.com/api/1.0/users?count=${this.props.pageSize}&page=${pageNumber}`)
+    Axios.get(`https://social-network.samuraijs.com/api/1.0/users?count=${this.props.pageSize}&page=${pageNumber}`, {
+      withCredentials: true
+    })
       .then(response => {
         this.props.toggleIsFetching(false);
         this.props.setUsers(response.data.items)
@@ -28,14 +32,8 @@ class UsersContainer extends React.Component {
   render() {
     return (
       <Users 
-      totalUsersCount={this.props.totalUsersCount}
-      pageSize={this.props.pageSize}
-      usersData={this.props.usersData}
-      follow={this.props.follow}
-      unfollow={this.props.unfollow}
-      currentPage={this.props.currentPage}
-      onPageSelected={this.onPageSelected}
-      isFetching={this.props.isFetching} />
+      {...this.props}
+      onPageSelected={this.onPageSelected} />
     );
   }
 }
