@@ -18,8 +18,7 @@ const Users = (props) => {
     status={u.status}
     photos={u.photos}
     followed={u.followed}
-    follow={props.follow}
-    unfollow={props.unfollow}
+    {...props}
     key={u.id}
     id={u.id}
   />)
