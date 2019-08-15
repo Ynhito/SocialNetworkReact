@@ -7,8 +7,10 @@ import { usersAPI } from '../../../api/usersAPI';
 const UserItem = (props) => {
 
   let follow = () => {
+    props.toggleFollowingProgress(true, props.id);
     usersAPI.follow(props.id)
       .then(response => {
+        props.toggleFollowingProgress(false, props.id);
         if (response.resultCode == 0) {
           props.follow(props.id);
         }
@@ -16,8 +18,10 @@ const UserItem = (props) => {
   }
 
   let unfollow = () => {
+    props.toggleFollowingProgress(true, props.id);
     usersAPI.unfollow(props.id)
       .then(response => {
+        props.toggleFollowingProgress(false, props.id);
         if (response.resultCode == 0) {
           props.unFollow(props.id);
         }
@@ -31,9 +35,21 @@ const UserItem = (props) => {
           <img src={props.photos.small !== null ? props.photos.small : userPhoto} alt="ava" />
         </NavLink>
         {props.followed ?
-          <button onClick={unfollow}>Unfollow</button>
+          <button 
+            disabled={props.followingInProgress.some(id => id === props.id)} 
+            onClick={unfollow}>
+              {props.followingInProgress.some(id => id === props.id) 
+              ? <div className={s.spinner}></div>
+              : 'Unfollow'}
+          </button>
           :
-          <button onClick={follow}>Follow</button>}
+          <button 
+            disabled={props.followingInProgress.some(id => id === props.id)} 
+            onClick={follow}>
+              {props.followingInProgress.some(id => id === props.id) 
+              ? <div className={s.spinner}></div>
+              : 'Follow'}
+          </button>}
       </div>
 
       <div className={s.userInfo}>

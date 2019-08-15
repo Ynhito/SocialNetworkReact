@@ -137,4 +137,21 @@
   100% {transform: scale(1);}
  }
 
- 
+ .spinner {
+  margin: 0 auto;
+  width: 15px;
+  height: 15px;
+  border: 1px solid;
+  border-radius: 50%;
+  border-left-color: transparent;
+  border-top-color: #fff;
+  border-right-color: #6991ad;
+  border-bottom-color: #4a76a8;
+  animation: spin 500ms infinite linear;
+}
+
+@keyframes spin {
+  100%{
+      transform: rotate(360deg);
+  }
+}
