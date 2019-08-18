@@ -1455,3 +1455,112 @@ componentDidMount() {
 **Вот и всё!)**
 
 ![1565524485562](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1565524485562.png)
+
+## Архитектурный паттерн нашего приложения в одной картинке
+
+Начало:  2 уровня. UI - User Interface. BLL - business logic layer.
+
+![1565949602035](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1565949602035.png)
+
+![1565949713701](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1565949713701.png)
+
+Эволюция - 3 уровня.UI - User Interface. BLL - business logic layer. DAL - data access layer
+
+![1565949848685](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1565949848685.png)
+
+Эволюция vol 2.0. Разгрузка UI уровня
+
+![1565950092440](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1565950092440.png)
+
+![1565951914995](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1565951914995.png)
+
+
+
+## Redux-Thunk
+
+users-reducer.js
+
+```
+export const getUsers = (pageSize, currentPage) => {
+  return (dispatch) => {
+    dispatch(toggleIsFetching(true));
+
+    usersAPI.getUsers(pageSize, currentPage)
+      .then(response => {
+        dispatch(toggleIsFetching(false));
+        dispatch(setUsers(response.items));
+        dispatch(setTotalUsersCount(response.totalCount));
+      })
+  }
+}
+```
+
+getUsers здесь является thunkCreator'ом. Он возвращает **thunk**
+
+**Thunk** - *это функция, которая нужна, чтобы организовать side effect. Например делает запрос на сервер (или же в нашем случаем обращается к dal уровню) и после получения ответа диспатчит action в store.*
+
+Это решает проблемы конвейера. Всё начинает идти последовательно.
+
+![1565950092440](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1565950092440.png)
+
+И BLL уровень становится по истине самым главным. Он становится как бы "менеджером" или "посредником" между всеми уровнями.
+
+Мы также передаём thunkCreator контейнерной компоненте, как мы делали это ранее с actionCreator
+
+```javascript
+const mapDispatchToProps = {
+  follow,
+  unFollow,
+  setTotalUsersCount,
+  setCurrentPage,
+  getUsers
+};
+```
+
+и вызываем 
+
+```javascript
+componentDidMount() {
+    this.props.getUsers(this.props.pageSize, this.props.currentPage);
+  }
+```
+
+Картинка ниже очень хорошо описывает весь процесс
+
+![1566127947019](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1566127947019.png)
+
+Но есть одно но, наш store умеет принимать только action. Т.е только объект. Как нам быть?
+
+Ну для начала нам конечно же нужно установить redax-thunk плагин
+
+```
+npm i redux-thunk --save
+```
+
+а также вторым параметром функции createStore передать applyMiddleware функцию с параметром thunkMiddleware(на самом деле он экспортируется по дефолту и вы можете назвать его как угодно)
+
+```javascript
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import profileReducer from "./profile-reducer";
+import messagesReducer from "./messages-reducer";
+import friendsReducer from "./friends-reducer";
+import usersReducer from "./users-reducer";
+import authReducer from "./auth-reducer";
+import thunkMiddleware from 'redux-thunk';
+
+let reducers = combineReducers({
+    profile : profileReducer,
+    messages : messagesReducer,
+    friends : friendsReducer,
+    users : usersReducer,
+    auth : authReducer
+});
+
+
+let store = createStore(reducers, applyMiddleware(thunkMiddleware));
+
+export default store;
+window.store = store;
+```
+
+Теперь при попадании thunk в store - store будет знать, что такое thunk. Это функция, а не привычный ему action(объект) и просто вызовет её, передав ей в качестве параметра метод dispatch.

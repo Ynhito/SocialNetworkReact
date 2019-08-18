@@ -2,30 +2,15 @@ import React from 'react';
 import s from './../Users.module.scss';
 import userPhoto from '../../../assets/images/768px-Circle-icons-profile.svg.png';
 import { NavLink } from 'react-router-dom';
-import { usersAPI } from '../../../api/usersAPI';
 
 const UserItem = (props) => {
 
   let follow = () => {
-    props.toggleFollowingProgress(true, props.id);
-    usersAPI.follow(props.id)
-      .then(response => {
-        props.toggleFollowingProgress(false, props.id);
-        if (response.resultCode == 0) {
-          props.follow(props.id);
-        }
-      })
+    props.follow(props.id);
   }
 
   let unfollow = () => {
-    props.toggleFollowingProgress(true, props.id);
-    usersAPI.unfollow(props.id)
-      .then(response => {
-        props.toggleFollowingProgress(false, props.id);
-        if (response.resultCode == 0) {
-          props.unFollow(props.id);
-        }
-      })
+    props.unFollow(props.id);
   }
   return (
 
