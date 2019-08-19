@@ -1,6 +1,7 @@
 import React from 'react';
 import s from './ProfileInfo.module.scss';
 import Preloader from '../../../assets/common/preloader/preloader';
+import userPhoto from '../../../assets/images/768px-Circle-icons-profile.svg.png';
 
 const ProfileInfo = (props) => {
 
@@ -14,7 +15,9 @@ const ProfileInfo = (props) => {
   return (
     <div className={s.ProfileInfo}>
       <div className={s.ava_follow_block}>
-        <img className={s.imageAvatar} src={props.profileData.photos.large} alt="Avatar" />
+        <img className={s.imageAvatar} src={props.profileData.photos.large !== null 
+        ? props.profileData.photos.large 
+        : userPhoto} alt="Avatar" />
         <button>Follow</button>
       </div>
 
