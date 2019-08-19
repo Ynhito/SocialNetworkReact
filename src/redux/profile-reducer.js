@@ -1,3 +1,5 @@
+import { usersAPI } from "../api/usersAPI";
+
 const ADD_POST = 'ADD-POST';
 const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
@@ -45,7 +47,7 @@ const profileReducer = (state = initialState, action) => {
   }
 
 }
-
+// ActionCreators
 export let addPostActionCreator = () => ({ type: ADD_POST });
 export let updateNewPostTextActionCreator = (text) => ({
   type: UPDATE_NEW_POST_TEXT,
@@ -57,5 +59,16 @@ export let setUserProfile = (profileData) => ({
 });
 export let toggleIsFetchingProfile = (isFetching) => ({ type: TOGGLE_IS_FETCHING_PROFILE, isFetching });
 
+// ThunkCreators
+export const getProfile = (userId) => {
+  return (dispatch) => {
+    dispatch(toggleIsFetchingProfile(true));
+    usersAPI.getProfile(userId)
+      .then(response => {
+        dispatch(toggleIsFetchingProfile(false));
+        dispatch(setUserProfile(response));
+      })
+  }
+}
 
 export default profileReducer;

@@ -14,14 +14,23 @@ export const usersAPI = {
     .then(response => response.data)
   },
 
-  follow(id){
-    return instansAxios.post(`follow/${id}`)
+  follow(userId){
+    return instansAxios.post(`follow/${userId}`)
     .then(response => response.data)
   },
 
-  unfollow(id){
-    return instansAxios.delete(`follow/${id}`)
+  unfollow(userId){
+    return instansAxios.delete(`follow/${userId}`)
     .then(response => response.data)
   },
+
+  getProfile(userId){
+    return instansAxios.get(`profile/${userId}`)
+    .then(response => response.data)
+  },
+  getAuthData(){
+    return instansAxios.get(`auth/me`)
+    .then(response => response.data)
+  }
 }
 
