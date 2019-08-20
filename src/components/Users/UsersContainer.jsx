@@ -4,6 +4,7 @@ import { follow, unFollow,
   setTotalUsersCount, setCurrentPage, 
    getUsers } from '../../redux/users-reducer';
 import React from 'react';
+import { compose } from 'redux';
 
 class UsersContainer extends React.Component {
 
@@ -42,4 +43,8 @@ const mapDispatchToProps = {
   getUsers
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UsersContainer);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps)
+)(UsersContainer);
+
+// export default connect(mapStateToProps, mapDispatchToProps)(UsersContainer);
