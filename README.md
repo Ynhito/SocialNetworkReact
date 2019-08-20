@@ -1604,3 +1604,84 @@ let initialState = {
 ```
 
 И должно быть указано то, что мы собираемся отрендерить.
+
+## HOC - High Order Component
+
+**HOC - High Order Component** - это не компонента, как может показаться. Это функция, которая принимает в качестве параметра компоненту, и возвращает новую компоненту. Она как бы создаёт обёртку над принятой компонентой, снабжая её новой логикой - данными.
+
+Давайте применим это на нашей логике с Redirect
+
+До этого нам приходилось в нужную компоненту передавать isAuth из Store и прописывать логику с условием на проверку авторизации. Мы копировали код, вновь и вновь. Это очень плохо, и в этом очень легко запутаться.
+
+Давайте создадим HOC. Назовём её withAuthRedirect
+
+```javascript
+import React from 'react';
+import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+
+let mapStateToProps = (state) => {
+  return {
+    isAuth: state.auth.isAuth
+  }
+}
+
+export const withAuthRedirect = (Component) => {
+
+  class RedirectComponent extends React.Component {
+    render() {
+      if (!this.props.isAuth) return <Redirect to={'/login'} />;
+      return <Component {...this.props} />
+    }
+  }
+
+  let ConnectedAuthRedirectComponent = connect(mapStateToProps)(RedirectComponent)
+
+
+  return ConnectedAuthRedirectComponent
+}
+```
+
+Давайте по шагам. Изначально внутри функции withAuthRedirect мы создаём компоненту (Она может быть как классовой, так и функциональной), снабжаем её нужной логикой(в нашем случаем проверкой на авторизованность) и возвращаем пришедшую в нас компоненту. ЗАТЕМ всё это мы оборачиваем connect'ом чтобы передать нашей компоненте isAuth из state.
+
+![1566304151424](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1566304151424.png)
+
+Мы уже использовали HOC до этого. Например **withRouter**.
+
+```javascript
+let withRouterProfileContainer = withRouter(AuthRedirectComponent);
+```
+
+**withRouter**  - *это функция, которая принимает компоненту и на её основе создаёт новую компоненту но уже с новыми данными*.( В нашем случае это данные url). Т.е она берёт старую компоненту, добавляет в неё пропсы и выкидывает под видом новой компоненты.
+
+На HOC withAuthRedirect работает таким же образом. Принимает компоненту, добавляет в неё логику и пропсы и выкидывает под видом новой компоненты.
+
+## Compose
+
+Compose - Это функция из библиотеки Redux, которая упрощает 'конвейер', делает его более понятным.
+
+Проще показать на коде
+
+Было
+
+```javascript
+let AuthRedirectComponent = withAuthRedirect(ProfileContainer);
+
+let withRouterProfileContainer = withRouter(AuthRedirectComponent);
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouterProfileContainer);
+```
+
+Стало
+
+```javascript
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withRouter,
+  withAuthRedirect
+)(ProfileContainer);
+```
+
+Функция вызывает дважды. Принцип такой же, как с функцией connect. Идём снизу - вверх. Изначально берём ProfileContainer и передаём её в качестве параметра функции withAuthRedirect. Она вызывается и возвращает компоненту. Далее - передаём эту компоненту в качестве параметра функции withRouter. Она вызывается и возвращает очередную новую компоненту. Передаём эту компоненту в качестве второго параметра функции connect(mapStateToProps, mapDispatchToProps). Она вызывается и возвращает **НОВУЮ** компоненту. Она же (наконец-то) и идёт на экспорт по дефолту.
+
+Теперь мы можем легко вклиниваться в этот конвейерный ад. 
