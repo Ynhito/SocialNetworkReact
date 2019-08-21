@@ -2,6 +2,7 @@ import React from 'react';
 import s from './ProfileInfo.module.scss';
 import Preloader from '../../../assets/common/preloader/preloader';
 import userPhoto from '../../../assets/images/768px-Circle-icons-profile.svg.png';
+import ProfileStatus from './ProfileStatus';
 
 const ProfileInfo = (props) => {
 
@@ -25,7 +26,7 @@ const ProfileInfo = (props) => {
 
         <div className={s.discription_block_top}>
           <h3 className={s.fullName}>{props.profileData.fullName}</h3>
-          <p className={s.status}>{props.profileData.aboutMe}</p>
+          <ProfileStatus {...props} />
         </div>
 
         <div className={s.short_info}>
