@@ -22,15 +22,27 @@ export const usersAPI = {
   unfollow(userId){
     return instansAxios.delete(`follow/${userId}`)
     .then(response => response.data)
-  },
+  }
+}
 
+export const profileAPI = {
   getProfile(userId){
     return instansAxios.get(`profile/${userId}`)
     .then(response => response.data)
   },
+  getStatus(userId){
+    return instansAxios.get(`profile/status/${userId}`)
+    .then(response => response.data)
+  },
+  updateStatus(status){
+    return instansAxios.put(`profile/status`, {status: status})
+    .then(response => response.data)
+  }
+}
+
+export const authAPI = {
   getAuthData(){
     return instansAxios.get(`auth/me`)
     .then(response => response.data)
   }
 }
-

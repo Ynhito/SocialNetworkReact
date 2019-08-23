@@ -5,7 +5,7 @@ import MyPostsContainer from './MyPosts/MyPostsContainer';
 const Profile = (props) => {
   return (
     <section>
-      <ProfileInfo profileData={props.profileData} isFetching={props.isFetching} />
+      <ProfileInfo {...props} />
       <MyPostsContainer />
     </section>
   );

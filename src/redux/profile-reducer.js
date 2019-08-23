@@ -1,9 +1,10 @@
-import { usersAPI } from "../api/usersAPI";
+import { profileAPI } from "../api/usersAPI";
 
 const ADD_POST = 'ADD-POST';
 const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const TOGGLE_IS_FETCHING_PROFILE = 'TOGGLE_IS_FETCHING_PROFILE';
+const SET_STATUS = 'SET_STATUS';
 
 let initialState = {
   postsData: [
@@ -12,7 +13,8 @@ let initialState = {
   ],
   profileData: null,
   newPostText: '',
-  isFetching: false
+  isFetching: false,
+  profileStatus: ''
 };
 
 const profileReducer = (state = initialState, action) => {
@@ -42,6 +44,11 @@ const profileReducer = (state = initialState, action) => {
         ...state,
         isFetching: action.isFetching
       }
+    case SET_STATUS:
+      return {
+        ...state,
+        profileStatus: action.newStatus
+      }
     default:
       return state;
   }
@@ -58,15 +65,37 @@ export let setUserProfile = (profileData) => ({
   profileData
 });
 export let toggleIsFetchingProfile = (isFetching) => ({ type: TOGGLE_IS_FETCHING_PROFILE, isFetching });
+export let setStatus = (newStatus) => ({ type: SET_STATUS, newStatus });
 
 // ThunkCreators
 export const getProfile = (userId) => {
   return (dispatch) => {
     dispatch(toggleIsFetchingProfile(true));
-    usersAPI.getProfile(userId)
+    profileAPI.getProfile(userId)
       .then(response => {
         dispatch(toggleIsFetchingProfile(false));
         dispatch(setUserProfile(response));
+      })
+  }
+}
+export const getProfileStatus = (userId) => {
+  return (dispatch) => {
+    // dispatch(toggleIsFetchingProfile(true));
+    profileAPI.getStatus(userId)
+      .then(response => {
+        // dispatch(toggleIsFetchingProfile(false));
+        dispatch(setStatus(response));
+      })
+  }
+}
+export const updateProfileStatus = (status) => {
+  return (dispatch) => {
+    // dispatch(toggleIsFetchingProfile(true));
+    profileAPI.updateStatus(status)
+      .then(response => {
+        if (response.resultCode === 0) {
+          dispatch(setStatus(status));
+        }
       })
   }
 }
