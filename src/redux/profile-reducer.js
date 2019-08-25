@@ -1,7 +1,6 @@
 import { profileAPI } from "../api/usersAPI";
 
 const ADD_POST = 'ADD-POST';
-const UPDATE_NEW_POST_TEXT = 'UPDATE-NEW-POST-TEXT';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const TOGGLE_IS_FETCHING_PROFILE = 'TOGGLE_IS_FETCHING_PROFILE';
 const SET_STATUS = 'SET_STATUS';
@@ -12,7 +11,6 @@ let initialState = {
     { id: 2, message: 'Its my first post' }
   ],
   profileData: null,
-  newPostText: '',
   isFetching: false,
   profileStatus: ''
 };
@@ -22,17 +20,11 @@ const profileReducer = (state = initialState, action) => {
     case ADD_POST:
       let newPost = {
         id: 3,
-        message: state.newPostText
+        message: action.newPostText
       };
       return {
         ...state,
         postsData: [...state.postsData, newPost],
-        newPostText: ''
-      };
-    case UPDATE_NEW_POST_TEXT:
-      return {
-        ...state,
-        newPostText: action.newText
       };
     case SET_USER_PROFILE:
       return {
@@ -55,11 +47,7 @@ const profileReducer = (state = initialState, action) => {
 
 }
 // ActionCreators
-export let addPostActionCreator = () => ({ type: ADD_POST });
-export let updateNewPostTextActionCreator = (text) => ({
-  type: UPDATE_NEW_POST_TEXT,
-  newText: text
-});
+export let addPost = (newPostText) => ({ type: ADD_POST, newPostText });
 export let setUserProfile = (profileData) => ({
   type: SET_USER_PROFILE,
   profileData

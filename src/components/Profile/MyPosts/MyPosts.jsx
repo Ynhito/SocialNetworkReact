@@ -1,33 +1,20 @@
 import React from 'react';
 import s from './MyPosts.module.scss';
 import Post from './Post/Post';
+import { Field, reduxForm } from 'redux-form'
 
 const MyPosts = (props) => {
-  let postElement = props.postsData //stateProfile.postsData
+  let postElement = props.postsData
     .map (p => <Post message={p.message} key={p.id} />);
-
-  let newPostElement = React.createRef();
-
-  let onAddPost = () => {
-    props.addPost();
-    //props.dispatch(addPostActionCreator()); //return {type: ADD_POST}
+  
+  let addNewPost = (formData) => {
+    props.addPost(formData.newPostBody);
   }
 
-  let onPostChange = () => {
-    let text = newPostElement.current.value;
-    props.updateNewPostText(text);
-    //props.dispatch(updateNewPostTextActionCreator(text)); //return {type: UPDATE_NEW_POST_TEXT, newText: text}
-  }
   return (
     <div className={s.MyPosts}>
       <div className={s.newPostInput}>
-        <textarea 
-          onChange={onPostChange} 
-          ref={newPostElement} 
-          value={props.newPostText} 
-          placeholder="Что у вас нового?"
-        />
-        <button onClick={onAddPost}>Send</button>
+        <PostFormRedux onSubmit={addNewPost} />
       </div>
       <div className={s.posts}>
         {postElement}
@@ -36,5 +23,18 @@ const MyPosts = (props) => {
 
   );
 };
+
+const postFrom = (props) => {
+  return (
+    <form onSubmit={props.handleSubmit}>
+      <Field placeholder="Что у вас нового?" component="textarea" name="newPostBody"/>
+        <button>Send</button>
+    </form>
+  );
+}
+
+const PostFormRedux = reduxForm({
+  form: "addNewPost"
+})(postFrom)
 
 export default MyPosts;
