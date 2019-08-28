@@ -2,6 +2,7 @@ import React from 'react';
 import s from './FormsControls.module.scss';
 
 export const FormControl = ({input, meta, ...props}) => {
+    //debugger
     const hasError = meta.touched && meta.error;
     return (
         <div className={s.form_control + " " + (hasError ? s.error : "")}>
@@ -12,13 +13,13 @@ export const FormControl = ({input, meta, ...props}) => {
 }
 
 export const Textarea = (props) => {
-    const {input, meta, child, ...restProps} = props;
+    const {input, ...restProps} = props;
     return <FormControl {...props} >
         <textarea {...input} {...restProps} ></textarea>
     </FormControl>
 }
 export const Input = (props) => {
-    const {input, meta, child, ...restProps} = props;
+    const {input, ...restProps} = props;
     return <FormControl {...props} >
         <input {...input} {...restProps} ></input>
     </FormControl>
