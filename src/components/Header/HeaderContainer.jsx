@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from './Header';
 import {connect} from 'react-redux';
-import { getAuthData } from '../../redux/auth-reducer'
+import { getAuthData, logout } from '../../redux/auth-reducer';
 
 class HeaderContainer extends React.Component {
 
@@ -25,7 +25,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = {
-  getAuthData
+  getAuthData,
+  logout
 }
 
 // let mapDispatchToProps = (dispatch) => {

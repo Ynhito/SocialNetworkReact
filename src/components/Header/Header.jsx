@@ -10,7 +10,12 @@ const Header = (props) => {
     </NavLink>
     {props.isFetching ? <div className={s.spinner}></div> : 
     <div className={s.loginBlock}>
-      {props.isAuth ? props.login :
+      {props.isAuth 
+        ? <div className={s.isAuthBlock}>
+          {props.login}
+          <button onClick={props.logout}>Log Out</button>
+        </div>  
+        :
       <NavLink to={'/login'}>Login</NavLink>}
     </div>}
   </header>

@@ -44,5 +44,14 @@ export const authAPI = {
   getAuthData(){
     return instansAxios.get(`auth/me`)
     .then(response => response.data)
-  }
+  },
+  login(email, password, rememberMe = false){
+    return instansAxios.post(`auth/login`, {email, password, rememberMe})
+    .then(response => response.data)
+  },
+  logout(){
+    return instansAxios.delete(`auth/login`)
+    .then(response => response.data)
+  },
+
 }

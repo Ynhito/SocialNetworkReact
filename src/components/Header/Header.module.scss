@@ -23,6 +23,11 @@
 
   .loginBlock {
     
+    .isAuthBlock {
+      display: flex;
+      flex-direction: column;
+    }
+
   }
 }
 
