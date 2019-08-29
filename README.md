@@ -1762,3 +1762,157 @@ componentDidUpdate(prevProps, prevState) {
 Этот метод вызовется на **6** шагу. Он как-бы говорит "ага, до этого в пропсах не было статуса, а теперь пришли новые пропсы, и здесь этот статус есть, значит изменю ка я локальный state методом setState, а уже данный метод вызовет новую перерисовку методом render"
 
 После перерисовки локальный state сразу будет иметь статус из пропсов, значит `<input />` сможет их оттуда взять.
+
+## Redux-Form
+
+Помните как мы воплощали в жизнь FLUX круговорот при каждом нажатии на кнопку на клавиатуре? Помните все эти onChange и onClick? Это очень круто. Правда, благодаря этому мы понимаем суть данной архитектуры.
+
+Мы это делали для разнообразных форм, в которые мы вводили текст. А если этих форм на сайте у нас будет 10?...30?...100? Неужели будет весело копировать один и тот же текст? Засорять глобальный state всеми флажками и временными значениями? НЕТ! Не нужно создавать велосипед, он уже давно создан до нас. Нам остаётся только брать и пользоваться!
+
+Redux-Form это библиотека, которая берёт на себя все обязанности по FLUX круговороту, все формы будут обрабатываться ОДНИМ reducer'ом, созданным данной библиотекой.
+
+Давайте по пунктам:
+
+1) Устанавливаем пакет Redux-Form
+
+2) Создаём новую ветку state под названием form и присваиваем ей formReducer, импортированный из пакета redux-form ( В самом пакете он называется reducer, что может ввести в заблуждение, так что импортируйте под названием, которое будет понятно **ВАМ**, например formReducer)
+
+redux-store.js
+
+```javascript
+import { createStore, combineReducers, applyMiddleware } from "redux";
+import profileReducer from "./profile-reducer";
+import messagesReducer from "./messages-reducer";
+import friendsReducer from "./friends-reducer";
+import usersReducer from "./users-reducer";
+import authReducer from "./auth-reducer";
+import thunkMiddleware from 'redux-thunk';
+import { reducer as formReducer } from 'redux-form'
+
+let reducers = combineReducers({
+    profile : profileReducer,
+    messages : messagesReducer,
+    friends : friendsReducer,
+    users : usersReducer,
+    auth : authReducer,
+    form : formReducer
+});
+
+
+let store = createStore(reducers, applyMiddleware(thunkMiddleware));
+
+export default store;
+window.store = store;
+```
+
+3) Для использования redux-form создаёте компоненту 
+
+```javascript
+const LoginForm = (props) => {
+  return (
+    <form onSubmit={props.handleSubmit}>
+      <div>
+        <Field placeholder="Login" 
+        component={Input} 
+        name="login"
+        validate={[required, maxLength10]} />
+      </div>
+      <div>
+        <Field placeholder="Password" 
+        component={Input} 
+        name="password"
+        validate={[required, maxLength10]} />
+      </div>
+      <div>
+        <Field type="checkbox" 
+        component={Input} 
+        name="rememberMe"
+        /> remember me
+      </div>
+      <div>
+        <button>Login</button>
+      </div>
+    </form>
+  );
+}
+```
+
+Всё ДОЛЖНО быть обёрнуто тегом **form**. ЭТО **ВАЖНО**
+
+Вместо обычных textarea и input используем компоненты Field, импортированные из redux-from
+
+```
+import { Field, reduxForm } from 'redux-form'
+```
+
+В качестве атрибутов необходимо указать **name** ( это то, как будет называться ветка подветки login, являющаяся в совю очередь веткой form) **Ниже всё поймёте!**
+
+А также необходимо указать **component**. Это то, что будет отрисовывать Field - input, textarea и т.п.
+
+4) Оборачиваете созданную компоненту HOC'ом под названием reduxForm, также импортированным из redux-form
+
+```javascript
+const LoginReduxForm = reduxForm({
+  // a unique name for the form
+  form: 'login'
+})(LoginForm)
+```
+
+Необходимо указать уникальное имя. ( это то, как будет называться подветка ветки form)
+
+![1567066574050](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1567066574050.png)
+
+Теперь необходимо отрисовать это
+
+```javascript
+const Login = (props) => {
+  return (
+    <div className={s.formContainer}>
+      <h1>Login</h1>
+      <LoginReduxForm/>
+    </div>
+  );
+}
+```
+
+Уже сейчас мы сможем увидеть что наш круговорот автоматически работает
+
+Ставим dubugger в созданной нами форме, и вводим любой символ в поле, например В
+
+![1567067268523](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1567067268523.png)
+
+Написанное нами значение автоматически внеслось в state. Это можно увидеть по свойству values в объекте login
+
+Вот такие  props передаёт HOC в нашу компоненту
+
+![1567067454013](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1567067454013.png)
+
+5) Сбор данных с формы по нажатию на кнопку.
+
+Укажите handleSumbit из пропсов как callbak, выполнейшейся по нажатию на кнопку (onSubmit)
+
+```javascript
+    <form onSubmit={props.handleSubmit}>
+```
+
+А в LoginReduxForm в качестве пропсов передайте onSubmit функцию, с помощью которой мы и будем управлять данными с формы.
+
+```javascript
+const Login = (props) => {
+
+  const onSubmit = (formData) => {
+    console.log(formData)
+  }
+
+  return (
+    <div className={s.formContainer}>
+      <h1>Login</h1>
+      <LoginReduxForm onSubmit={onSubmit}/>
+    </div>
+  );
+}
+```
+
+Ниже на рисунке показано как происходит вызов каждого callback и когда.
+
+![reduxform](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/reduxform.png)

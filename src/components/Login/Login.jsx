@@ -22,6 +22,7 @@ const Login = (props) => {
 }
 
 const LoginForm = (props) => {
+  debugger
   return (
     <form onSubmit={props.handleSubmit}>
       <div>
