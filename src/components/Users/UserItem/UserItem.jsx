@@ -17,7 +17,7 @@ const UserItem = (props) => {
     <div className={s.userItem}>
       <div className={s.userAva}>
         <NavLink to={'/profile/' + props.id}>
-          <img src={props.photos.small !== null ? props.photos.small : userPhoto} alt="ava" />
+          <img className={s.avaImg} src={props.photos.small !== null ? props.photos.small : userPhoto} alt="ava" />
         </NavLink>
         {props.followed ?
           <button 

@@ -26,6 +26,26 @@
     .isAuthBlock {
       display: flex;
       flex-direction: column;
+      justify-content: center;
+
+      p {
+        text-align: center;
+        margin-bottom: 2px;
+      }
+
+      button {
+        background: transparent;
+        color: #fff;
+        border: 1px solid #fff;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all .3s ease;
+
+        &:hover {
+          background-color: #fff;
+          color: #4a76a8;
+        }
+      }
     }
 
   }
