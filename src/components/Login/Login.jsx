@@ -53,6 +53,9 @@ const LoginForm = (props) => {
       <div>
         <button>Login</button>
       </div>
+      { props.error && <div className={s.authError}>
+        {props.error}
+      </div>}
     </form>
   );
 }
