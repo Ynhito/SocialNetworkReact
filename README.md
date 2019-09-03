@@ -1916,3 +1916,261 @@ const Login = (props) => {
 Ниже на рисунке показано как происходит вызов каждого callback и когда.
 
 ![reduxform](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/reduxform.png)
+
+## Redux-Form validators и деструктуризация
+
+Чтобы мы смогли использовать валидаторы для наших Fiel, у нас должна быть написана логика. Логику невозможно запихать внутрь стандартного HTML тега. Потому что это просто **ТЕГ**, не компонента. Самое первое и логичное что приходит на ум - это создать компоненту, которая будет отрисовывать обычный тег. Так и есть
+
+Для начала создадим сами валидаторы. **Валидаторы** - это функции, которые принимают введённое в Field значение и следуя логике, написанной нами отдают либо undefinned, либо текст ошибки.
+
+validators.js
+
+```javascript
+export const required = value => {
+    if (value) return undefined;
+    return "Это поле является обязательным"
+}
+export const maxLengthCreator = (maxLength) => (value) => {
+    if (value.length > maxLength) return `Максимальная длина - ${maxLength} символов`;
+    return undefined;
+}
+```
+
+Здесь написаны 2 валидатора. Один проверяет есть ли значение (обязательное поле или нет), а другой какова длина введёного нами значения.
+
+Кто вызывает данные функции и куда их нужно передавать? Их нужно передать Field в качестве атрибута validate массивом, в котором через запятую указать нужные валидаторы.
+
+```javascript
+<Field
+        name="username"
+        type="text"
+        component={renderField}
+        label="Username"
+        validate={[required, maxLength15, minLength2]}
+        warn={alphaNumeric}
+      />
+```
+
+Компонента Field же сама их и вызовет. Результат, т.е ошибка, если таковая имеется, попадёт в пропсы, которые будет передавать Field компоненте, которую она отрисовывает. Она попадёт в объект meta свойство error.
+
+В случае с максимальной длинной мы должны использовать замыкание, чтобы вводить любое число количества символов. НУ ЛИБО ГОВНОКОДИТЬ. Создавая десятки функций, в которых будут отличаться только цифры.
+
+По-хорошему нам просто нужно создать переменную внутри файла нужной компоненты с формой и приравнять ей вызов данного валидатора.
+
+```javascript
+const maxLength30 = maxLengthCreator(30);
+```
+
+Давайте вернёмся к созданию компоненты, которая возвращает обычный тег
+
+```javascript
+export const FormControl = ({input, meta, ...props}) => {
+    const hasError = meta.touched && meta.error;
+    return (
+        <div className={s.form_control + " " + (hasError ? s.error : "")}>
+            <textarea {...input} {...props} ><textarea/>
+            { hasError && <span>{meta.error}</span>}
+        </div>
+    );
+}
+```
+
+Создаём переменную hasError (Есть ошибка). Это переменная как бы говорит "ошибка есть, если поле тронуто и есть ошибка".
+
+Далее, если ошибка есть, то классу form_control добавляется класс error
+
+Вот такие стили добавляются 
+
+```scss
+.form_control.error {
+  textarea, input {
+    border: 2px solid red!important;
+  }
+  span {
+    color: red;
+  }
+}
+```
+
+Внутри данного div находится textarea, внутрь которой мы должны **ОБЯЗАТЕЛЬНО** должны передать input, заранее диструктуризированный из пропсов и оставшиеся пропсы. Внутри Input сидят такие вещи как: Имя поля, value и все стандартные методы и функции по взаимодействию с тегом типа onChange, onFocus и другие. Стандартный html тег не умеет обращаться сначала к пропсам, чтобы достать оттуда Input,  а уже оттуда например значение. Вот поэтому мы и применяем деструктуризацию.
+
+Под нашим полем для ввода мы оставляем span, который виден только при наличии ошибки. Внутрь этого span мы передаём сам текст ошибки. Как мы уже знаем, он находится в meta.error.
+
+
+
+Теперь рубрика "Нет говнокоду!"
+
+Что если вместо textarea мы ходим использовать input? Копировать код? ДА ТЫ ГОВНОКОДЕР. Сам задумайся, отличаться будет только одна строчка.
+
+Давай лучше сделаем так
+
+```javascript
+import React from 'react';
+import s from './FormsControls.module.scss';
+
+export const FormControl = ({input, meta, ...props}) => {
+    const hasError = meta.touched && meta.error;
+    return (
+        <div className={s.form_control + " " + (hasError ? s.error : "")}>
+            {props.children}
+            { hasError && <span>{meta.error}</span>}
+        </div>
+    );
+}
+
+export const Textarea = (props) => {
+    const {input, ...restProps} = props;
+    return <FormControl {...props} >
+        <textarea {...input} {...restProps} ></textarea>
+    </FormControl>
+}
+export const Input = (props) => {
+    const {input, ...restProps} = props;
+    return <FormControl {...props} >
+        <input {...input} {...restProps} ></input>
+    </FormControl>
+}
+```
+
+#### Композиция, что это и зачем.
+
+Давайте покажу на практическом примере что такое композиция
+
+```javascript
+export const FormControl = ({input, meta, ...props}) => {
+    const hasError = meta.touched && meta.error;
+    return (
+        <div className={s.form_control + " " + (hasError ? s.error : "")}>
+            {props.children}
+            { hasError && <span>{meta.error}</span>}
+        </div>
+    );
+}
+
+export const Textarea = (props) => {
+    debugger
+    const {input, ...restProps} = props;
+    return <FormControl {...props} >
+        <textarea {...input} {...restProps} ></textarea>
+    </FormControl>
+}
+```
+
+Мы пишем тег, и внутрь него помещаем нужный нам контент(например другую компоненту)
+
+```javascript
+<FormControl {...props} >
+    <textarea {...input} {...restProps} ></textarea>
+</FormControl>
+```
+
+Чтобы до неё достучаться, а именно указать место, где она будет выводиться, нужно обратиться к children внутри props
+
+```javascript
+<div className={s.form_control + " " + (hasError ? s.error : "")}>
+    {props.children}
+	{ hasError && <span>{meta.error}</span>}
+ </div>
+```
+
+Давайте покажу как это выглядит внутри
+
+```javascript
+export const Textarea = (props) => {
+    const {input, ...restProps} = props;
+    const hasError = meta.touched && meta.error;
+    return (
+        <div className={s.form_control + " " + (hasError ? s.error : "")}>
+            <textarea {...input} {...restProps} ></textarea>
+            { hasError && <span>{meta.error}</span>}
+        </div>
+    );
+}
+```
+
+Композиция необходима, в первую очередь для рефакторинга кода. Дабы избежать повторного кода.
+
+#### Ещё пару слов про деструктуризацию. Что это и с чем едят.
+
+Она строится на базе rest оператора (...) 
+
+Проще показать на практике
+
+```javascript
+let log = (prop) => {
+	console.log(prop)
+}
+
+log(1,2,3,4,5);
+```
+
+![1567363368480](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1567363368480.pngg)
+
+А теперь применим rest оператор
+
+```javascript
+let log = (...prop) => {
+	console.log(prop)
+}
+
+log(1,2,3,4,5);
+```
+
+![1567363461202](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1567363461202.png)
+
+Он объединил все входные параметры в одну сущность.
+
+Давайте теперь передадим этой функции объект
+
+```javascript
+const prop = {
+    input: {
+        name: 'Dima',
+        lastName: 'Osincev',
+        love: 'Julia'
+    },
+    meta: {
+        sky: 'Blue',
+        sun: 'Yelow'
+    },
+    type: null
+}
+
+let log = (prop) => {
+	console.log(prop)
+}
+
+log(prop);
+```
+
+![1567363747497](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1567363747497.png)
+
+Выводит объект. Если применить rest оператор на параметр, то он выведет это
+
+![1567363862457](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1567363862457.png)
+
+Теперь давайте попробуем это
+
+```javascript
+let log = ({input, ...props}) => {
+	console.log(input)
+}
+
+log(prop);
+```
+
+![1567364011979](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1567364011979.png)
+
+Выводит только input. Все же остальные свойства объединяются в одну сущность под общим названием props (Можно называть как угодно)
+
+Давайте попробуем вывести эти props
+
+```javascript
+let log = ({input, ...props}) => {
+	console.log(props)
+}
+
+log(prop);
+```
+
+![1567364125842](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1567364125842.png)
