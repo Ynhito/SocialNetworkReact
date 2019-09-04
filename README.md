@@ -2104,7 +2104,7 @@ let log = (prop) => {
 log(1,2,3,4,5);
 ```
 
-![1567363368480](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1567363368480.pngg)
+![1567363368480](https://github.com/Dvachee/SocialNetworkReact/raw/master/README-IMG/1567363368480.png)
 
 А теперь применим rest оператор
 
