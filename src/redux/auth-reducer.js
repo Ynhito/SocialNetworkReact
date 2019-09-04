@@ -37,7 +37,7 @@ export let toggleIsFetchingAuth = (isFetching) => ({ type: TOGGLE_IS_FETCHING_AU
 export const getAuthData = () => {
   return (dispatch) => {
     dispatch(toggleIsFetchingAuth(true));
-    authAPI.getAuthData()
+    return authAPI.getAuthData()
       .then(response => {
         dispatch(toggleIsFetchingAuth(false))
         if (response.resultCode === 0) {
