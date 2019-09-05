@@ -1,10 +1,22 @@
-import { connect } from 'react-redux';
+import * as reactRedux from 'react-redux';
 import Users from './Users';
-import { follow, unFollow,  
-  setTotalUsersCount, setCurrentPage, 
-   getUsers } from '../../redux/users-reducer';
+import { 
+  follow, 
+  unFollow,  
+  setTotalUsersCount, 
+  setCurrentPage, 
+   getUsers 
+  } from '../../redux/users-reducer';
 import React from 'react';
 import { compose } from 'redux';
+import {
+    requestUsers,
+    getPageSize,
+    getTotalUsersCount,
+    getCurrentPage,
+    getIsFetching,
+    getFollowingInProgress
+} from '../../redux/users-selector';
 
 class UsersContainer extends React.Component {
 
@@ -26,12 +38,12 @@ class UsersContainer extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    usersData: state.users.usersData,
-    pageSize: state.users.pageSize,
-    totalUsersCount: state.users.totalUsersCount,
-    currentPage: state.users.currentPage,
-    isFetching: state.users.isFetching,
-    followingInProgress: state.users.followingInProgress
+    usersData: requestUsers(state),
+    pageSize: getPageSize(state),
+    totalUsersCount: getTotalUsersCount(state),
+    currentPage: getCurrentPage(state),
+    isFetching: getIsFetching(state),
+    followingInProgress: getFollowingInProgress(state)
   }
 };
 
@@ -44,7 +56,7 @@ const mapDispatchToProps = {
 };
 
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps)
+  reactRedux.connect(mapStateToProps, mapDispatchToProps)
 )(UsersContainer);
 
 // export default connect(mapStateToProps, mapDispatchToProps)(UsersContainer);

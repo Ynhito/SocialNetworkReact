@@ -17,7 +17,6 @@ import InitialPreloader from './assets/common/initialPreloader/initialPreloader'
 class App extends React.Component {
 
   componentDidMount() {
-    // this.props.getAuthData();
     this.props.initializeApp();
   }
 
