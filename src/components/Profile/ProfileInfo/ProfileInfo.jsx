@@ -27,7 +27,7 @@ const ProfileInfo = (props) => {
 
         <div className={s.discription_block_top}>
           <h3 className={s.fullName}>{props.profileData.fullName}</h3>
-          <ProfileStatus {...props} />
+          <ProfileStatusHook {...props} />
         </div>
 
         <div className={s.short_info}>
