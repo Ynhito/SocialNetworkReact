@@ -4,6 +4,7 @@ const ADD_POST = 'ADD-POST';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const TOGGLE_IS_FETCHING_PROFILE = 'TOGGLE_IS_FETCHING_PROFILE';
 const SET_STATUS = 'SET_STATUS';
+const DELETE_POST = 'DELETE_POST';
 
 let initialState = {
   postsData: [
@@ -41,6 +42,11 @@ const profileReducer = (state = initialState, action) => {
         ...state,
         profileStatus: action.newStatus
       }
+    case DELETE_POST:
+      return {
+        ...state,
+        profileData: state.postsData.filter(p => p.id !== action.postId)
+      }
     default:
       return state;
   }
@@ -48,6 +54,7 @@ const profileReducer = (state = initialState, action) => {
 }
 // ActionCreators
 export let addPost = (newPostText) => ({ type: ADD_POST, newPostText });
+export let deletePost = (postId) => ({ type: DELETE_POST, postId });
 export let setUserProfile = (profileData) => ({
   type: SET_USER_PROFILE,
   profileData
