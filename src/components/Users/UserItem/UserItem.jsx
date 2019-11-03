@@ -3,43 +3,53 @@ import s from './../Users.module.scss';
 import userPhoto from '../../../assets/images/768px-Circle-icons-profile.svg.png';
 import { NavLink } from 'react-router-dom';
 
-const UserItem = (props) => {
+const UserItem = ({
+  follow,
+  unFollow,
+  id,
+  photos,
+  followingInProgress,
+  fullName,
+  followed,
+  status
+}) => {
 
-  let follow = () => {
-    props.follow(props.id);
+  let onFollow = () => {
+    follow(id);
   }
 
-  let unfollow = () => {
-    props.unFollow(props.id);
+  let onUnfollow = () => {
+    unFollow(id);
   }
   return (
 
     <div className={s.userItem}>
       <div className={s.userAva}>
-        <NavLink to={'/profile/' + props.id}>
-          <img className={s.avaImg} src={props.photos.small !== null ? props.photos.small : userPhoto} alt="ava" />
+        <NavLink to={'/profile/' + id}>
+          <img className={s.avaImg} src={photos.small !== null ?
+             photos.small : userPhoto} alt="ava" />
         </NavLink>
-        {props.followed ?
+        {followed ?
           <button 
-            disabled={props.followingInProgress.some(id => id === props.id)} 
-            onClick={unfollow}>
-              {props.followingInProgress.some(id => id === props.id) 
+            disabled={followingInProgress.some(id => id === id)} 
+            onClick={onUnfollow}>
+              {followingInProgress.some(id => id === id) 
               ? <div className={s.spinner}></div>
               : 'Unfollow'}
           </button>
           :
           <button 
-            disabled={props.followingInProgress.some(id => id === props.id)} 
-            onClick={follow}>
-              {props.followingInProgress.some(id => id === props.id) 
+            disabled={followingInProgress.some(id => id === id)} 
+            onClick={onFollow}>
+              {followingInProgress.some(id => id === id) 
               ? <div className={s.spinner}></div>
               : 'Follow'}
           </button>}
       </div>
 
       <div className={s.userInfo}>
-        <h3> {props.fullName} </h3>
-        <p className={s.status}> {props.status} </p>
+        <h3> {fullName} </h3>
+        <p className={s.status}> {status} </p>
       </div>
 
     </div>

@@ -2,7 +2,6 @@ import React from 'react';
 import s from './ProfileInfo.module.scss';
 import Preloader from '../../../assets/common/preloader/preloader';
 import userPhoto from '../../../assets/images/768px-Circle-icons-profile.svg.png';
-import ProfileStatus from './ProfileStatus';
 import ProfileStatusHook from './ProfileStatusHook';
 
 const ProfileInfo = (props) => {

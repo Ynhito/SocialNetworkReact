@@ -64,34 +64,25 @@ export let setStatus = (newStatus) => ({ type: SET_STATUS, newStatus });
 
 // ThunkCreators
 export const getProfile = (userId) => {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch(toggleIsFetchingProfile(true));
-    profileAPI.getProfile(userId)
-      .then(response => {
-        dispatch(toggleIsFetchingProfile(false));
-        dispatch(setUserProfile(response));
-      })
+    let response = await profileAPI.getProfile(userId);
+    dispatch(toggleIsFetchingProfile(false));
+    dispatch(setUserProfile(response));
   }
 }
 export const getProfileStatus = (userId) => {
-  return (dispatch) => {
-    // dispatch(toggleIsFetchingProfile(true));
-    profileAPI.getStatus(userId)
-      .then(response => {
-        // dispatch(toggleIsFetchingProfile(false));
-        dispatch(setStatus(response));
-      })
+  return async (dispatch) => {
+    let response = await profileAPI.getStatus(userId);
+    dispatch(setStatus(response));
   }
 }
 export const updateProfileStatus = (status) => {
-  return (dispatch) => {
-    // dispatch(toggleIsFetchingProfile(true));
-    profileAPI.updateStatus(status)
-      .then(response => {
-        if (response.resultCode === 0) {
-          dispatch(setStatus(status));
-        }
-      })
+  return async (dispatch) => {
+    let response = await profileAPI.updateStatus(status);
+    if (response.resultCode === 0) {
+      dispatch(setStatus(status));
+    }
   }
 }
 
