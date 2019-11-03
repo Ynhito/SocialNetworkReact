@@ -1,6 +1,4 @@
 import profileReducer, {addPost, deletePost} from "./profile-reducer";
-import ReactDOM from "react-dom";
-import App from "../App";
 
 it('new post should be added', () => {
     // 1. test data
